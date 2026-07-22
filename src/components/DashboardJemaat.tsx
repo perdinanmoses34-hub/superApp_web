@@ -335,6 +335,8 @@ export default function DashboardJemaat({
         return 'renungan';
       case 'events':
         return 'event';
+      case 'prayers':
+        return 'prayers';
       case 'donasi':
         return 'donasi';
       case 'ministries':
@@ -360,6 +362,8 @@ export default function DashboardJemaat({
         return 'devotions';
       case 'event':
         return 'events';
+      case 'prayers':
+        return 'prayers';
       case 'donasi':
         return 'donasi';
       case 'pelayanan':
@@ -607,6 +611,7 @@ export default function DashboardJemaat({
             { id: 'jadwal', label: 'Jadwal Ibadah', icon: Calendar },
             { id: 'renungan', label: 'Renungan', icon: BookOpen },
             { id: 'event', label: 'Event Gereja', icon: Award },
+            { id: 'prayers', label: 'Pokok Doa', icon: Heart },
             { id: 'donasi', label: 'Kas/Donasi', icon: Coins },
             { id: 'pelayanan', label: 'Pelayanan', icon: Heart },
             { id: 'pengurus', label: 'Pengurus', icon: Users },
@@ -1522,6 +1527,150 @@ export default function DashboardJemaat({
                   </div>
                 </div>
               ))}
+          </div>
+        </div>
+      )}
+
+      {/* POKOK DOA TAB */}
+      {activeTab === 'prayers' && (
+        <div className="space-y-6 animate-fade-in">
+          <div>
+            <h2 className="font-display font-bold text-gray-800 text-lg">Pokok Doa & Syafaat Jemaat</h2>
+            <p className="text-xs text-gray-400">Saling menanggung beban di dalam doa. Kirimkan permohonan doa Anda agar didoakan oleh Tim Doa Syafaat dan Gembala Gereja.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Form Kirim Pokok Doa */}
+            <div className="lg:col-span-1 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4 h-fit">
+              <div className="flex items-center gap-2 text-rose-600">
+                <Heart className="w-5 h-5 fill-rose-500" />
+                <h3 className="font-display font-bold text-gray-800 text-sm">Kirim Permohonan Doa</h3>
+              </div>
+
+              <form onSubmit={handleAddPrayer} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                    Isi Permohonan Doa
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={newPrayer}
+                    onChange={(e) => setNewPrayer(e.target.value)}
+                    placeholder="Tuliskan pokok doa, pergumulan, keluarga, kesehatan, atau kesaksian Anda..."
+                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-800 focus:border-brand focus:bg-white transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                    No. HP / WhatsApp (Untuk Dihubungi Tim Doa)
+                  </label>
+                  <input
+                    type="tel"
+                    value={prayerPhone}
+                    onChange={(e) => setPrayerPhone(e.target.value)}
+                    placeholder="e.g. 08123456789"
+                    className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-800 focus:border-brand focus:bg-white transition-all"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2 p-3 bg-rose-50/50 rounded-xl border border-rose-100/60">
+                  <input
+                    type="checkbox"
+                    id="isPrivatePrayer"
+                    checked={isPrivatePrayer}
+                    onChange={(e) => setIsPrivatePrayer(e.target.checked)}
+                    className="w-4 h-4 text-brand rounded focus:ring-brand cursor-pointer"
+                  />
+                  <label htmlFor="isPrivatePrayer" className="text-xs text-gray-700 cursor-pointer font-medium">
+                    🔒 Rahasia (Hanya untuk Tim Doa Syafaat & Penggembalaan)
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Send className="w-3.5 h-3.5" /> Kirim Permohonan Doa
+                </button>
+              </form>
+            </div>
+
+            {/* List Pokok Doa */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-gray-800 text-sm">Daftar Doa & Syafaat Bersama</h3>
+                <span className="text-[10px] bg-rose-50 text-rose-600 px-2.5 py-1 rounded-full font-bold border border-rose-100">
+                  {prayers.filter(p => !p.isPrivate || p.userId === currentUser.id).length} Pokok Doa
+                </span>
+              </div>
+
+              {prayers.filter(p => !p.isPrivate || p.userId === currentUser.id).length === 0 ? (
+                <div className="p-8 text-center bg-white border border-gray-100 rounded-2xl shadow-sm space-y-2">
+                  <Heart className="w-8 h-8 text-rose-300 mx-auto" />
+                  <p className="text-xs text-gray-400 italic">Belum ada pokok doa publik saat ini. Jadilah yang pertama mengirimkan permohonan doa!</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {prayers
+                    .filter(p => !p.isPrivate || p.userId === currentUser.id)
+                    .map((item) => (
+                      <div
+                        key={item.id}
+                        className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-3 relative hover:border-rose-200 transition-all"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-xs text-gray-800">{item.userName}</span>
+                            {item.isPrivate && (
+                              <span className="px-2 py-0.5 bg-amber-50 text-amber-700 text-[9px] font-bold rounded-full border border-amber-200">
+                                🔒 Rahasia
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-gray-400 font-mono">
+                            {new Date(item.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-gray-700 leading-relaxed bg-gray-50/80 p-3.5 rounded-xl border border-gray-100">
+                          {item.content}
+                        </p>
+
+                        <div className="flex items-center justify-between pt-1 text-[10px]">
+                          <div>
+                            {item.status === 'pending' && (
+                              <span className="px-2.5 py-1 bg-amber-50 text-amber-700 font-bold rounded-full border border-amber-200">
+                                ⏳ Menunggu Syafaat
+                              </span>
+                            )}
+                            {item.status === 'prayed' && (
+                              <span className="px-2.5 py-1 bg-teal-50 text-teal-700 font-bold rounded-full border border-teal-200">
+                                🙏 Sedang Didoakan Tim
+                              </span>
+                            )}
+                            {item.status === 'answered' && (
+                              <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-full border border-emerald-200">
+                                ✨ Doa Dijawab / Kesaksian
+                              </span>
+                            )}
+                          </div>
+
+                          <button
+                            id={`pray-btn-${item.id}`}
+                            onClick={() => handleSupportPrayer(item.id)}
+                            className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-xl transition-all cursor-pointer border border-rose-200 flex items-center gap-1.5"
+                          >
+                            <Heart className="w-3.5 h-3.5 fill-rose-500" />
+                            <span>Ikut Mendoakan (Amin)</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

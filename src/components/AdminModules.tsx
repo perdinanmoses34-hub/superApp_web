@@ -37,6 +37,10 @@ import {
   CreditCard,
   DollarSign,
   Wallet,
+  Heart,
+  Send,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import { MockDatabase } from '../db/mockDb';
 import {
@@ -55,6 +59,7 @@ import {
   User,
   ServiceSchedule,
   Donation,
+  PrayerRequest,
 } from '../types';
 import {
   initGoogleDriveAuth,
@@ -137,6 +142,18 @@ export default function AdminModules({
   const [users, setUsers] = useState<User[]>([]);
   const [schedules, setSchedules] = useState<ServiceSchedule[]>([]);
   const [donations, setDonations] = useState<Donation[]>([]);
+  const [prayers, setPrayers] = useState<PrayerRequest[]>([]);
+
+  // Pokok Doa Module Filters & States
+  const [prayerFilterStatus, setPrayerFilterStatus] = useState<'all' | 'pending' | 'prayed' | 'answered'>('all');
+  const [prayerSearchQuery, setPrayerSearchQuery] = useState('');
+  const [isAddingPrayerAdmin, setIsAddingPrayerAdmin] = useState(false);
+  const [adminPrayerForm, setAdminPrayerForm] = useState({
+    userName: '',
+    phone: '',
+    content: '',
+    isPrivate: false,
+  });
 
   // Donasi & Rekening Module States
   const [isAddingManualDonation, setIsAddingManualDonation] = useState(false);
@@ -258,7 +275,7 @@ export default function AdminModules({
   // Custom non-blocking Delete Confirmation Modal state
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
-    type: 'schedule' | 'clear_all_schedules' | 'news' | 'announcement' | 'devotion' | 'event' | 'congregation' | 'gallery' | 'ministry' | 'organization' | 'user' | 'donation';
+    type: 'schedule' | 'clear_all_schedules' | 'news' | 'announcement' | 'devotion' | 'event' | 'congregation' | 'gallery' | 'ministry' | 'organization' | 'user' | 'donation' | 'prayer' | 'notification' | 'clear_all_notifications';
     id?: string;
     title?: string;
   } | null>(null);
@@ -357,6 +374,7 @@ export default function AdminModules({
     setUsers(MockDatabase.getUsers());
     setSchedules(MockDatabase.getSchedules());
     setDonations(MockDatabase.getDonations());
+    setPrayers(MockDatabase.getPrayerRequests());
 
     if (selectedEventIdForRegistrants) {
       const regs = MockDatabase.getEventRegistrations();
@@ -505,6 +523,9 @@ export default function AdminModules({
     } else if (type === 'donation' && id) {
       MockDatabase.deleteDonation(id, currentUser);
       showToast('Data donasi berhasil dihapus dari kas.', 'success');
+    } else if (type === 'prayer' && id) {
+      MockDatabase.deletePrayerRequest(id, currentUser);
+      showToast('Permohonan pokok doa berhasil dihapus.', 'success');
     } else if (type === 'notification' && id) {
       MockDatabase.deleteNotification(id, currentUser);
       showToast(`Notifikasi "${title || ''}" berhasil dihapus.`, 'success');
@@ -3999,6 +4020,382 @@ export default function AdminModules({
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* 14. POKOK DOA SYAFAAT MODULE */}
+          {activeTab === 'admin_prayers' && (
+            <div className="space-y-6">
+              {/* Header section */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-rose-500 fill-rose-100" />
+                    <h3 className="font-display font-black text-gray-800 text-lg">Kelola Pokok Doa & Syafaat Jemaat</h3>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-0.5">Kelola permohonan doa jemaat, status pendampingan tim syafaat, dan catatan kesaksian jawaban doa.</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setIsAddingPrayerAdmin(true);
+                    setAdminPrayerForm({ userName: '', phone: '', content: '', isPrivate: false });
+                  }}
+                  className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0"
+                >
+                  <Plus className="w-4 h-4" /> Catat Pokok Doa Baru
+                </button>
+              </div>
+
+              {/* Stats Overview */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-1">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Permohonan</span>
+                  <p className="text-2xl font-black text-gray-800">{prayers.length}</p>
+                </div>
+                <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-100/80 shadow-sm space-y-1">
+                  <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Menunggu Doa</span>
+                  <p className="text-2xl font-black text-amber-700">{prayers.filter(p => p.status === 'pending').length}</p>
+                </div>
+                <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100/80 shadow-sm space-y-1">
+                  <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Sedang Didoakan</span>
+                  <p className="text-2xl font-black text-blue-700">{prayers.filter(p => p.status === 'prayed').length}</p>
+                </div>
+                <div className="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100/80 shadow-sm space-y-1">
+                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Tuhan Jawab / Kesaksian</span>
+                  <p className="text-2xl font-black text-emerald-700">{prayers.filter(p => p.status === 'answered').length}</p>
+                </div>
+              </div>
+
+              {/* Add Prayer Form Overlay Modal */}
+              {isAddingPrayerAdmin && (
+                <div className="bg-white p-6 rounded-3xl border border-rose-100 shadow-xl space-y-4">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <h4 className="font-display font-bold text-gray-800 text-sm flex items-center gap-2">
+                      <Heart className="w-4 h-4 text-rose-500" /> Tambah Pokok Doa Jemaat
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={() => setIsAddingPrayerAdmin(false)}
+                      className="p-1 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-600 text-lg font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!adminPrayerForm.userName.trim() || !adminPrayerForm.content.trim()) {
+                        showToast('Nama jemaat dan isi pokok doa wajib diisi!', 'error');
+                        return;
+                      }
+                      const newPry: PrayerRequest = {
+                        id: `pry_${Date.now()}`,
+                        userId: currentUser.id,
+                        userName: adminPrayerForm.userName.trim(),
+                        phone: adminPrayerForm.phone.trim(),
+                        content: adminPrayerForm.content.trim(),
+                        date: new Date().toISOString(),
+                        isPrivate: adminPrayerForm.isPrivate,
+                        status: 'pending',
+                      };
+                      MockDatabase.addPrayerRequest(newPry);
+                      showToast('✓ Pokok doa berhasil dicatat ke dalam database admin & jemaat!', 'success');
+                      setIsAddingPrayerAdmin(false);
+                      loadAllData();
+                    }}
+                    className="space-y-4 text-xs"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                          Nama Jemaat Pemohon *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={adminPrayerForm.userName}
+                          onChange={(e) => setAdminPrayerForm({ ...adminPrayerForm, userName: e.target.value })}
+                          placeholder="Contoh: Ibu Maria Wijaya"
+                          className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-white focus:border-rose-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                          Nomor HP / WhatsApp (Opsional)
+                        </label>
+                        <input
+                          type="text"
+                          value={adminPrayerForm.phone}
+                          onChange={(e) => setAdminPrayerForm({ ...adminPrayerForm, phone: e.target.value })}
+                          placeholder="Contoh: 081234567890"
+                          className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-white focus:border-rose-500 font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                        Isi Permohonan Doa / Pokok Syafaat *
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={adminPrayerForm.content}
+                        onChange={(e) => setAdminPrayerForm({ ...adminPrayerForm, content: e.target.value })}
+                        placeholder="Tuliskan detail permohonan doa jemaat..."
+                        className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-white focus:border-rose-500"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                      <input
+                        type="checkbox"
+                        id="isPrivateAdminCheck"
+                        checked={adminPrayerForm.isPrivate}
+                        onChange={(e) => setAdminPrayerForm({ ...adminPrayerForm, isPrivate: e.target.checked })}
+                        className="w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer"
+                      />
+                      <label htmlFor="isPrivateAdminCheck" className="text-xs font-semibold text-gray-700 cursor-pointer">
+                        Sifat Rahasia (Khusus Konseling / Hamba Tuhan & Tim Doa Admin)
+                      </label>
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingPrayerAdmin(false)}
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-xs rounded-xl cursor-pointer"
+                      >
+                        Batal
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+                      >
+                        Simpan Pokok Doa
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {/* Filters and Search Bar */}
+              <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                {/* Status Filter Tabs */}
+                <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+                  <button
+                    onClick={() => setPrayerFilterStatus('all')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      prayerFilterStatus === 'all' ? 'bg-rose-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Semua ({prayers.length})
+                  </button>
+                  <button
+                    onClick={() => setPrayerFilterStatus('pending')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      prayerFilterStatus === 'pending' ? 'bg-amber-600 text-white shadow-sm' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+                    }`}
+                  >
+                    ⏳ Menunggu ({prayers.filter(p => p.status === 'pending').length})
+                  </button>
+                  <button
+                    onClick={() => setPrayerFilterStatus('prayed')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      prayerFilterStatus === 'prayed' ? 'bg-blue-600 text-white shadow-sm' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                    }`}
+                  >
+                    🙏 Didoakan ({prayers.filter(p => p.status === 'prayed').length})
+                  </button>
+                  <button
+                    onClick={() => setPrayerFilterStatus('answered')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      prayerFilterStatus === 'answered' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                    }`}
+                  >
+                    🎉 Answered ({prayers.filter(p => p.status === 'answered').length})
+                  </button>
+                </div>
+
+                {/* Search Bar */}
+                <div className="relative w-full md:w-64">
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    value={prayerSearchQuery}
+                    onChange={(e) => setPrayerSearchQuery(e.target.value)}
+                    placeholder="Cari nama, No HP, atau isi..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-800 focus:border-rose-500"
+                  />
+                </div>
+              </div>
+
+              {/* Prayer Requests List */}
+              <div className="space-y-4">
+                {prayers
+                  .filter((p) => {
+                    if (prayerFilterStatus !== 'all' && p.status !== prayerFilterStatus) return false;
+                    if (prayerSearchQuery.trim()) {
+                      const q = prayerSearchQuery.toLowerCase();
+                      return (
+                        p.userName.toLowerCase().includes(q) ||
+                        p.content.toLowerCase().includes(q) ||
+                        (p.phone && p.phone.includes(q))
+                      );
+                    }
+                    return true;
+                  })
+                  .length === 0 ? (
+                  <div className="bg-white rounded-3xl p-12 text-center border border-dashed border-gray-200 space-y-3">
+                    <Heart className="w-10 h-10 text-gray-300 mx-auto" />
+                    <p className="text-sm font-semibold text-gray-500">Tidak ada permohonan doa yang sesuai filter saat ini.</p>
+                  </div>
+                ) : (
+                  prayers
+                    .filter((p) => {
+                      if (prayerFilterStatus !== 'all' && p.status !== prayerFilterStatus) return false;
+                      if (prayerSearchQuery.trim()) {
+                        const q = prayerSearchQuery.toLowerCase();
+                        return (
+                          p.userName.toLowerCase().includes(q) ||
+                          p.content.toLowerCase().includes(q) ||
+                          (p.phone && p.phone.includes(q))
+                        );
+                      }
+                      return true;
+                    })
+                    .map((p) => (
+                      <div
+                        key={p.id}
+                        className="bg-white p-5 rounded-2xl border border-gray-150 shadow-sm hover:shadow-md transition-all space-y-3"
+                      >
+                        {/* Top info bar */}
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-gray-50 pb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 font-bold text-sm shrink-0">
+                              {p.userName ? p.userName.charAt(0).toUpperCase() : 'J'}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-bold text-sm text-gray-800">{p.userName}</h4>
+                                {p.isPrivate ? (
+                                  <span className="bg-purple-100 text-purple-700 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-purple-200">
+                                    <Lock className="w-2.5 h-2.5" /> Rahasia
+                                  </span>
+                                ) : (
+                                  <span className="bg-gray-100 text-gray-600 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <Unlock className="w-2.5 h-2.5" /> Publik Jemaat
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-3 text-[10px] text-gray-400 mt-0.5">
+                                <span>📅 {new Date(p.date).toLocaleString('id-ID')}</span>
+                                {p.phone && <span>📞 HP: <strong className="text-gray-600 font-mono">{p.phone}</strong></span>}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Status Badge Indicator */}
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                p.status === 'answered'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                  : p.status === 'prayed'
+                                  ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                                  : 'bg-amber-100 text-amber-800 border border-amber-200'
+                              }`}
+                            >
+                              {p.status === 'answered'
+                                ? '🎉 Tuhan Jawab'
+                                : p.status === 'prayed'
+                                ? '🙏 Sedang Didoakan'
+                                : '⏳ Menunggu Doa'}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Prayer Content */}
+                        <p className="text-xs text-gray-700 leading-relaxed font-normal whitespace-pre-line bg-gray-50/60 p-3.5 rounded-xl border border-gray-100">
+                          "{p.content}"
+                        </p>
+
+                        {/* Action buttons bar */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                          <div className="flex items-center gap-2">
+                            {p.status !== 'prayed' && (
+                              <button
+                                onClick={() => {
+                                  MockDatabase.updatePrayerStatus(p.id, 'prayed', currentUser);
+                                  showToast('✓ Status permohonan diperbarui: SEDANG DIDOAKAN tim syafaat.', 'success');
+                                  loadAllData();
+                                }}
+                                className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] rounded-lg transition-colors cursor-pointer flex items-center gap-1 border border-blue-200/60"
+                              >
+                                🙏 Tandai Sedang Didoakan
+                              </button>
+                            )}
+
+                            {p.status !== 'answered' && (
+                              <button
+                                onClick={() => {
+                                  MockDatabase.updatePrayerStatus(p.id, 'answered', currentUser);
+                                  showToast('🎉 Puji Tuhan! Status permohonan diperbarui: TUHAN JAWAB / KESAKSIAN.', 'success');
+                                  loadAllData();
+                                }}
+                                className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] rounded-lg transition-colors cursor-pointer flex items-center gap-1 border border-emerald-200/60"
+                              >
+                                🎉 Tandai Tuhan Jawab
+                              </button>
+                            )}
+
+                            {p.status !== 'pending' && (
+                              <button
+                                onClick={() => {
+                                  MockDatabase.updatePrayerStatus(p.id, 'pending', currentUser);
+                                  showToast('Status permohonan dikembalikan ke Menunggu Doa.', 'info');
+                                  loadAllData();
+                                }}
+                                className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-[10px] rounded-lg transition-colors cursor-pointer"
+                              >
+                                ⏳ Kembalikan Pending
+                              </button>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {p.phone && (
+                              <a
+                                href={`https://wa.me/${p.phone.replace(/[^0-9]/g, '')}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] rounded-lg transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
+                              >
+                                💬 Hubungi WhatsApp
+                              </a>
+                            )}
+
+                            <button
+                              onClick={() => {
+                                setDeleteModal({
+                                  isOpen: true,
+                                  type: 'prayer',
+                                  id: p.id,
+                                  title: `Pokok doa dari ${p.userName}`,
+                                });
+                              }}
+                              className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[10px] rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" /> Hapus
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </div>
             </div>
           )}
       </div>

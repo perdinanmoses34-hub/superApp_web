@@ -1732,6 +1732,16 @@ export class MockDatabase {
     }
   }
 
+  static deletePrayerRequest(id: string, actor?: { id: string; name: string; role: Role }) {
+    const safeActor = actor || { id: 'usr_admin', name: 'Admin', role: 'ADMIN' as Role };
+    const items = this.getPrayerRequests();
+    const before = items.find((i) => i.id === id);
+    this.setStored('prayer_requests', items.filter((i) => i.id !== id));
+    if (before) {
+      this.addLog(safeActor, 'DELETE_PRAYER_REQUEST', JSON.stringify(before), undefined);
+    }
+  }
+
   static getDonations(): Donation[] {
     return this.getStored('donations', DEFAULT_DONATIONS);
   }

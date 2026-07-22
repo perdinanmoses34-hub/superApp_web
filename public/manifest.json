@@ -1,8 +1,8 @@
 {
   "id": "church-management-system-app",
-  "short_name": "CMS GEREJA",
-  "name": "SYSTEM MANAJEMEN CHURCH",
-  "description": "Aplikasi Sistem Manajemen & Pelayanan Gereja Digital Android Native Standalone",
+  "short_name": "CMS",
+  "name": "CMS - SYSTEM MANAJEMEN CHURCH",
+  "description": "Aplikasi CMS Sistem Manajemen & Pelayanan Gereja Digital Android Standalone",
   "prefer_related_applications": false,
   "icons": [
     {

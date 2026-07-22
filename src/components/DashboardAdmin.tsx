@@ -21,6 +21,7 @@ import {
   ShieldAlert,
   Coins,
   CheckCircle2,
+  Heart,
 } from 'lucide-react';
 import { MockDatabase } from '../db/mockDb';
 import { ActivityLog, Congregation, Role, ChurchSettings } from '../types';
@@ -321,17 +322,25 @@ export default function DashboardAdmin({ setTab, currentUser, settings }: Dashbo
         </div>
 
         {/* Komentar & Doa */}
-        <div className="bg-[#0F172A]/90 border border-slate-800/80 p-5 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[140px] group hover:scale-[1.02] transition-all shadow-lg">
+        <div
+          onClick={() => setTab('admin_prayers')}
+          className="bg-[#0F172A]/90 border border-slate-800/80 p-5 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[140px] group hover:scale-[1.02] hover:border-emerald-500/50 transition-all shadow-lg cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <p className="text-slate-400 font-extrabold text-[10px] uppercase tracking-widest">Permohonan Doa</p>
             <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
-              <MessageSquare className="w-4 h-4" />
+              <Heart className="w-4 h-4 fill-emerald-500/20" />
             </div>
           </div>
           <p className="text-3xl font-black text-white mt-2">{stats.prayers}</p>
-          <span className="bg-emerald-500/15 text-emerald-400 text-[10px] px-3 py-1 rounded-full font-black w-fit uppercase border border-emerald-500/20 mt-3">
-            Syafaat Masuk
-          </span>
+          <div className="flex items-center justify-between mt-3">
+            <span className="bg-emerald-500/15 text-emerald-400 text-[10px] px-3 py-1 rounded-full font-black w-fit uppercase border border-emerald-500/20">
+              Syafaat Masuk
+            </span>
+            <span className="text-[10px] text-emerald-400 font-bold group-hover:underline flex items-center gap-0.5">
+              Kelola Doa →
+            </span>
+          </div>
         </div>
       </div>
 
@@ -463,6 +472,15 @@ export default function DashboardAdmin({ setTab, currentUser, settings }: Dashbo
               <Calendar className="w-5 h-5 text-blue-400" />
               <p className="text-xs font-bold text-slate-200 mt-2 group-hover:text-blue-400">Buat Event Baru</p>
               <span className="text-[9px] text-slate-500">Jadwal & Presensi</span>
+            </button>
+
+            <button
+              onClick={() => setTab('admin_prayers')}
+              className="p-3 bg-slate-900/50 hover:bg-slate-800/50 border border-slate-800/60 hover:border-rose-500 rounded-xl text-left transition-all group cursor-pointer"
+            >
+              <Heart className="w-5 h-5 text-rose-400" />
+              <p className="text-xs font-bold text-slate-200 mt-2 group-hover:text-rose-400">Pokok Doa Syafaat</p>
+              <span className="text-[9px] text-slate-500">Moderasi & Tim Doa</span>
             </button>
 
             <button

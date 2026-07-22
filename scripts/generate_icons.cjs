@@ -41,8 +41,8 @@ const svgIcon = `
   <path d="M256 220 C256 200, 230 190, 220 205 C210 220, 230 240, 256 255 C282 240, 302 220, 292 205 C282 190, 256 200, 256 220 Z" fill="#EF4444" opacity="0.95"/>
 
   <!-- Bottom Text Badge -->
-  <text x="256" y="420" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">GBI ROCK</text>
-  <text x="256" y="450" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="20" fill="#FCD34D" text-anchor="middle" letter-spacing="6">JUANDA</text>
+  <text x="256" y="425" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="52" fill="#FFFFFF" text-anchor="middle" letter-spacing="8">CMS</text>
+  <text x="256" y="455" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="14" fill="#FCD34D" text-anchor="middle" letter-spacing="4">CHURCH SYSTEM</text>
 </svg>
 `;
 
@@ -64,8 +64,8 @@ const svgMaskable = `
     <circle cx="256" cy="256" r="200" stroke="url(#gold-gradient)" stroke-width="6" opacity="0.4"/>
     <rect x="232" y="100" width="48" height="260" rx="12" fill="url(#gold-gradient)"/>
     <rect x="156" y="170" width="200" height="48" rx="12" fill="url(#gold-gradient)"/>
-    <text x="256" y="420" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">GBI ROCK</text>
-    <text x="256" y="450" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="20" fill="#FCD34D" text-anchor="middle" letter-spacing="6">JUANDA</text>
+    <text x="256" y="425" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="52" fill="#FFFFFF" text-anchor="middle" letter-spacing="8">CMS</text>
+    <text x="256" y="455" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="14" fill="#FCD34D" text-anchor="middle" letter-spacing="4">CHURCH SYSTEM</text>
   </g>
 </svg>
 `;

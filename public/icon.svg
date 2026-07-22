@@ -37,6 +37,6 @@
   <path d="M256 220 C256 200, 230 190, 220 205 C210 220, 230 240, 256 255 C282 240, 302 220, 292 205 C282 190, 256 200, 256 220 Z" fill="#EF4444" opacity="0.95"/>
 
   <!-- Bottom Text Badge -->
-  <text x="256" y="420" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">GBI ROCK</text>
-  <text x="256" y="450" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="20" fill="#FCD34D" text-anchor="middle" letter-spacing="6">JUANDA</text>
+  <text x="256" y="425" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="52" fill="#FFFFFF" text-anchor="middle" letter-spacing="8">CMS</text>
+  <text x="256" y="455" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="14" fill="#FCD34D" text-anchor="middle" letter-spacing="4">CHURCH SYSTEM</text>
 </svg>

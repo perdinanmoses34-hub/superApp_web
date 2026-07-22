@@ -26,6 +26,7 @@ import {
   Sun,
   User,
   Coins,
+  Heart,
 } from 'lucide-react';
 import { Role, User as UserType, ChurchSettings } from '../types';
 
@@ -104,6 +105,7 @@ export default function Sidebar({
       { id: 'admin_congregation', label: 'Data Jemaat', visible: true },
       { id: 'admin_users', label: 'Kelola Akun & Sandi', visible: true },
       { id: 'admin_donations', label: 'Donasi & Kas Gereja', visible: true },
+      { id: 'admin_prayers', label: 'Pokok Doa Syafaat', visible: true },
       { id: 'admin_comments', label: 'Moderasi Komentar', visible: true },
       { id: 'admin_notifications', label: 'Kirim Notifikasi', visible: true },
       { id: 'admin_ministries', label: 'Kelola Pelayanan', visible: true },
@@ -111,6 +113,7 @@ export default function Sidebar({
       { id: 'admin_gallery', label: 'Kelola Galeri', visible: true },
       { id: 'admin_settings', label: 'Pengaturan Sistem', visible: true },
       { id: 'jemaat_home', label: 'Beranda Jemaat', visible: true },
+      { id: 'jemaat_prayers', label: 'Pokok Doa', visible: true },
       { id: 'jemaat_schedule', label: 'Jadwal Ibadah', visible: true },
       { id: 'jemaat_devotions', label: 'Renungan Harian', visible: true },
       { id: 'jemaat_events', label: 'Event Gereja', visible: true },
@@ -157,6 +160,7 @@ export default function Sidebar({
     { id: 'admin_congregation', label: 'Data Jemaat', icon: Users },
     { id: 'admin_users', label: 'Kelola Akun & Sandi', icon: UserCheck },
     { id: 'admin_donations', label: 'Donasi & Kas Gereja', icon: Coins },
+    { id: 'admin_prayers', label: 'Pokok Doa Syafaat', icon: Heart },
     { id: 'admin_comments', label: 'Moderasi Komentar', icon: MessageSquare },
     { id: 'admin_notifications', label: 'Kirim Notifikasi', icon: Bell },
     { id: 'admin_ministries', label: 'Kelola Pelayanan', icon: Award },
@@ -181,6 +185,7 @@ export default function Sidebar({
 
   const jemaatNav = [
     { id: 'jemaat_home', label: 'Beranda Jemaat', icon: Church },
+    { id: 'jemaat_prayers', label: 'Pokok Doa', icon: Heart },
     { id: 'jemaat_schedule', label: 'Jadwal Ibadah', icon: Calendar },
     { id: 'jemaat_devotions', label: 'Renungan Harian', icon: BookOpen },
     { id: 'jemaat_events', label: 'Event Gereja', icon: TrendingUp },
