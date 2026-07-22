@@ -78,6 +78,15 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
       }
     };
 
+    // Global prompt capture handler for POCO / Xiaomi / Samsung / Infinix
+    (window as any).onPwaPromptCaptured = (e: any) => {
+      console.log('[PWA Component] Prompt captured via global handler:', e);
+      setDeferredPrompt(e);
+      if (!isStandaloneMode) {
+        setShowInstallBanner(true);
+      }
+    };
+
     // Listen for PWA Install Prompt event aggressively
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -202,7 +211,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                     {logoUrl ? (
                       <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
                     ) : (
-                      <span className="text-4xl sm:text-5xl">⛪</span>
+                      <img src="./icon.svg" alt="Logo Church" className="w-full h-full object-contain p-1" />
                     )}
                   </div>
                 </div>
@@ -260,8 +269,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 p-0.5 flex-shrink-0 shadow-lg">
-                  <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-xl">
-                    📱
+                  <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center p-2 overflow-hidden">
+                    <img src="./icon.svg" alt="Church App Icon" className="w-full h-full object-contain" />
                   </div>
                 </div>
                 <div>
@@ -323,8 +332,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
               </button>
 
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-amber-500/20 text-amber-400 rounded-2xl text-2xl">
-                  📲
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 p-2 text-amber-400 shrink-0 border border-amber-500/30 flex items-center justify-center">
+                  <img src="./icon.svg" alt="Church Logo" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h3 className="font-extrabold text-base text-slate-100">Instal Aplikasi Ke Layar Utama HP</h3>

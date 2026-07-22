@@ -223,7 +223,7 @@ export default function Sidebar({
           {settings.logoUrl ? (
             <img src={settings.logoUrl} alt="Logo" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
           ) : (
-            <Church className="w-6 h-6 text-indigo-400" />
+            <img src="./icon.svg" alt="Church Logo" className="w-full h-full object-contain p-1" />
           )}
         </div>
         <div className="min-w-0">

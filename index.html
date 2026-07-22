@@ -2,7 +2,16 @@
 <html lang="id">
   <head>
     <script>
-      // 1. Auto-redirect to trailing slash for GitHub Pages to prevent relative base blank screen.
+      // Global PWA prompt listener captured as early as possible for POCO / Xiaomi / Samsung / Infinix / All Androids
+      window.deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.deferredPrompt = e;
+        console.log('[PWA] Global beforeinstallprompt captured early!');
+        if (typeof window.onPwaPromptCaptured === 'function') {
+          window.onPwaPromptCaptured(e);
+        }
+      });
       // Checks for real file extensions rather than just presence of a dot, so repos like 'tn.timbu_web' redirect properly.
       if (
         window.location.hostname.endsWith('.github.io') &&
