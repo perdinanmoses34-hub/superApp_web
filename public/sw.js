@@ -19,9 +19,15 @@ const ASSETS_TO_CACHE = [
 // Install Event
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then(async (cache) => {
       console.log('[Service Worker] Caching offline shell...');
-      return cache.addAll(ASSETS_TO_CACHE);
+      for (const asset of ASSETS_TO_CACHE) {
+        try {
+          await cache.add(asset);
+        } catch (e) {
+          console.warn('[Service Worker] Skipping uncacheable asset:', asset, e);
+        }
+      }
     })
   );
   self.skipWaiting();

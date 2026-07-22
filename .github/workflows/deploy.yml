@@ -41,8 +41,14 @@ jobs:
 
       - name: Build 🏗️
         run: |
-          echo "Building application with relative base path for GitHub Pages compatibility..."
-          export VITE_BASE_URL="./"
+          echo "Building application for GitHub Pages..."
+          REPO_NAME="${{ github.event.repository.name }}"
+          if [ -n "$REPO_NAME" ]; then
+            export VITE_BASE_URL="/$REPO_NAME/"
+          else
+            export VITE_BASE_URL="./"
+          fi
+          echo "Using VITE_BASE_URL=$VITE_BASE_URL"
           npm run build
           cp dist/index.html dist/404.html
 
