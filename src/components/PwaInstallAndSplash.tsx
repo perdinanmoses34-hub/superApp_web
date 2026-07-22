@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, Smartphone, CheckCircle2, X, Share, Sparkles, Shield, ArrowRight } from 'lucide-react';
+import { Download, Smartphone, CheckCircle2, X, Share, Sparkles, Shield, Chrome, Compass, Info, HelpCircle } from 'lucide-react';
 
 interface PwaInstallAndSplashProps {
   churchName?: string;
@@ -16,9 +16,18 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
-  const [showIosGuide, setShowIosGuide] = useState(false);
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'ios'>('android');
   const [isInstalling, setIsInstalling] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+
+  // Device & Browser Detection State
+  const [deviceInfo, setDeviceInfo] = useState({
+    isAndroid: false,
+    isIos: false,
+    isMobile: false,
+    browserName: 'Chrome',
+  });
 
   useEffect(() => {
     // Check if already running in PWA standalone mode
@@ -26,6 +35,24 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as any).standalone === true;
     setIsStandalone(isStandaloneMode);
+
+    // Detect Device & Browser types
+    const ua = navigator.userAgent.toLowerCase();
+    const isAndroid = /android/i.test(ua);
+    const isIos = /ipad|iphone|ipod/i.test(ua) && !(window as any).MSStream;
+    const isMobile = isAndroid || isIos || /mobile|tablet/i.test(ua);
+
+    let browserName = 'Browser';
+    if (/samsungbrowser/i.test(ua)) browserName = 'Samsung Internet';
+    else if (/miuibrowser/i.test(ua)) browserName = 'Xiaomi Browser';
+    else if (/ucbrowser/i.test(ua)) browserName = 'UC Browser';
+    else if (/opera|opr/i.test(ua)) browserName = 'Opera';
+    else if (/firefox|fxios/i.test(ua)) browserName = 'Firefox';
+    else if (/crios|chrome/i.test(ua)) browserName = 'Chrome';
+    else if (/safari/i.test(ua)) browserName = 'Safari';
+
+    setDeviceInfo({ isAndroid, isIos, isMobile, browserName });
+    setActiveGuideTab(isIos ? 'ios' : 'android');
 
     // Animated Splash Progress Effect
     const interval = setInterval(() => {
@@ -39,27 +66,36 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
       });
     }, 150);
 
-    // Listen for PWA Install Prompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      // Check if user hasn't dismissed install banner recently
+    // Function to decide whether to show floating install banner
+    const checkAndShowBanner = () => {
+      if (isStandaloneMode) return;
       const lastDismiss = localStorage.getItem('pwa_install_dismissed');
       if (!lastDismiss || Date.now() - Number(lastDismiss) > 24 * 60 * 60 * 1000) {
         setShowInstallBanner(true);
       }
     };
 
+    // Listen for PWA Install Prompt event
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      checkAndShowBanner();
+    };
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Check if iOS device
-    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    if (isIos && !isStandaloneMode) {
-      const lastDismiss = localStorage.getItem('pwa_install_dismissed');
-      if (!lastDismiss || Date.now() - Number(lastDismiss) > 24 * 60 * 60 * 1000) {
-        setShowInstallBanner(true);
-      }
+    // Always ensure banner shows up on all non-standalone mobile devices after splash screen
+    if (isMobile && !isStandaloneMode) {
+      setTimeout(checkAndShowBanner, 2000);
     }
+
+    // Register global window helper for manual triggers
+    (window as any).triggerPwaInstall = () => {
+      handleInstallClick();
+    };
+    (window as any).openPwaGuide = () => {
+      setShowGuideModal(true);
+    };
 
     return () => {
       clearInterval(interval);
@@ -69,21 +105,38 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
-      setIsInstalling(true);
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the PWA install prompt');
-        setShowInstallBanner(false);
-        setShowInstallModal(false);
-      } else {
-        console.log('User dismissed the PWA install prompt');
+      try {
+        setIsInstalling(true);
+        deferredPrompt.prompt();
+        const choiceResult = await deferredPrompt.userChoice;
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the PWA install prompt');
+          setShowInstallBanner(false);
+          setShowInstallModal(false);
+          setShowGuideModal(false);
+        } else {
+          console.log('User dismissed the PWA install prompt');
+        }
+      } catch (err) {
+        console.error('Failed to trigger native install prompt:', err);
+        // Fallback to guide
+        if (deviceInfo.isIos) setActiveGuideTab('ios');
+        else setActiveGuideTab('android');
+        setShowGuideModal(true);
+      } finally {
+        setIsInstalling(false);
+        setDeferredPrompt(null);
       }
-      setIsInstalling(false);
-      setDeferredPrompt(null);
     } else {
-      // Show iOS guide if deferredPrompt is not available or on iOS
-      setShowIosGuide(true);
+      // Native deferred prompt is not available on this device/browser (e.g. Samsung/Xiaomi/UC/iOS/InApp)
+      // Open the appropriate installation guide modal based on OS
+      if (deviceInfo.isIos) {
+        setActiveGuideTab('ios');
+      } else {
+        setActiveGuideTab('android');
+      }
+      setShowInstallModal(false);
+      setShowGuideModal(true);
     }
   };
 
@@ -168,7 +221,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         )}
       </AnimatePresence>
 
-      {/* 2. FLOATING PWA INSTALL PROMPT BANNER (FOR HP / MOBILE) */}
+      {/* 2. FLOATING PWA INSTALL PROMPT BANNER (FOR ALL MOBILE / ANDROID / IOS) */}
       <AnimatePresence>
         {showInstallBanner && !isStandalone && (
           <motion.div
@@ -192,7 +245,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 font-medium leading-tight mt-0.5">
-                    Gunakan tanpa lewat Play Store. Tampilan fullscreen tanpa space bar browser & notifikasi langsung!
+                    Gunakan tanpa lewat Play Store. Tampilan fullscreen tanpa space bar browser & mendukung offline!
                   </p>
                 </div>
               </div>
@@ -211,13 +264,14 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                 className="flex-1 py-2.5 px-4 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Download className="w-4 h-4" />
-                <span>{isInstalling ? 'Memasang Aplikasi...' : '⚡ Instal Sekarang'}</span>
+                <span>{isInstalling ? 'Memasang...' : '⚡ Instal Sekarang'}</span>
               </button>
               <button
                 onClick={() => setShowInstallModal(true)}
-                className="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-2xl border border-slate-700 transition-all cursor-pointer"
+                className="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-2xl border border-slate-700 transition-all cursor-pointer flex items-center gap-1"
               >
-                Info
+                <Info className="w-3.5 h-3.5 text-slate-400" />
+                <span>Info</span>
               </button>
             </div>
           </motion.div>
@@ -271,8 +325,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                 <div className="flex items-start gap-2.5 p-3 bg-slate-950/80 rounded-2xl border border-slate-800">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-slate-100 block font-bold">Notifikasi Bar HP Real-time</strong>
-                    <span className="text-slate-400 text-[11px]">Pengumuman & warta gereja langsung muncul di bar pemberitahuan atas ponsel Anda.</span>
+                    <strong className="text-slate-100 block font-bold">Mendukung Offline & Cepat</strong>
+                    <span className="text-slate-400 text-[11px]">Dapat dibuka dengan cepat dan data tetap tersimpan rapi di ponsel.</span>
                   </div>
                 </div>
               </div>
@@ -286,11 +340,18 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                   <Download className="w-4 h-4" />
                   <span>{isInstalling ? 'Proses Memasang...' : 'Pasang Sekarang Ke HP'}</span>
                 </button>
+
                 <button
-                  onClick={() => setShowInstallModal(false)}
-                  className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-2xl transition-all cursor-pointer"
+                  onClick={() => {
+                    setShowInstallModal(false);
+                    if (deviceInfo.isIos) setActiveGuideTab('ios');
+                    else setActiveGuideTab('android');
+                    setShowGuideModal(true);
+                  }}
+                  className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  Tutup
+                  <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Panduan Cara Instal Manual</span>
                 </button>
               </div>
             </motion.div>
@@ -298,18 +359,18 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         )}
       </AnimatePresence>
 
-      {/* 4. IOS SAFARI INSTRUCTIONS MODAL */}
+      {/* 4. UNIFIED PWA INSTALLATION GUIDE MODAL (FOR ALL ANDROID PHONES & IOS) */}
       <AnimatePresence>
-        {showIosGuide && (
-          <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        {showGuideModal && (
+          <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 text-white rounded-3xl max-w-md w-full p-6 border border-slate-800 shadow-2xl space-y-4 relative"
+              className="bg-slate-900 text-white rounded-3xl max-w-md w-full p-6 border border-slate-800 shadow-2xl space-y-5 relative my-auto"
             >
               <button
-                onClick={() => setShowIosGuide(false)}
+                onClick={() => setShowGuideModal(false)}
                 className="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-full transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -320,34 +381,134 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                   📱
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-sm text-slate-100">Cara Instal Di iPhone / iPad (iOS)</h3>
-                  <p className="text-xs text-slate-400">Gunakan browser Safari</p>
+                  <h3 className="font-extrabold text-base text-slate-100 uppercase tracking-wide">
+                    PANDUAN INSTALASI HP
+                  </h3>
+                  <p className="text-xs text-slate-400">Instal Tanpa Lewat Play Store / App Store</p>
                 </div>
               </div>
 
-              <div className="space-y-3 text-xs text-slate-300 pt-2">
-                <div className="flex items-center gap-3 p-3 bg-slate-950 rounded-2xl border border-slate-800">
-                  <span className="w-7 h-7 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center flex-shrink-0">1</span>
-                  <p>Tap tombol <strong>Share 📤</strong> di bagian bawah layar Safari Anda.</p>
-                </div>
-
-                <div className="flex items-center gap-3 p-3 bg-slate-950 rounded-2xl border border-slate-800">
-                  <span className="w-7 h-7 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center flex-shrink-0">2</span>
-                  <p>Geser menu ke bawah lalu pilih <strong>'Tambah ke Layar Utama' (Add to Home Screen)</strong>.</p>
-                </div>
-
-                <div className="flex items-center gap-3 p-3 bg-slate-950 rounded-2xl border border-slate-800">
-                  <span className="w-7 h-7 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center flex-shrink-0">3</span>
-                  <p>Tap <strong>'Tambah' (Add)</strong> di pojok kanan atas. Selesai!</p>
-                </div>
+              {/* PLATFORM SELECTOR TABS */}
+              <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800">
+                <button
+                  onClick={() => setActiveGuideTab('android')}
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    activeGuideTab === 'android'
+                      ? 'bg-amber-500 text-slate-950 shadow-md'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Chrome className="w-4 h-4" />
+                  <span>Android (Semua HP)</span>
+                </button>
+                <button
+                  onClick={() => setActiveGuideTab('ios')}
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    activeGuideTab === 'ios'
+                      ? 'bg-amber-500 text-slate-950 shadow-md'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>iPhone / iPad (iOS)</span>
+                </button>
               </div>
 
-              <button
-                onClick={() => setShowIosGuide(false)}
-                className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-2xl transition-all cursor-pointer mt-2"
-              >
-                Saya Mengerti
-              </button>
+              {/* TAB CONTENT: ANDROID (CHROME, SAMSUNG, XIAOMI, OPPO, VIVO, UC) */}
+              {activeGuideTab === 'android' && (
+                <div className="space-y-4 animate-fade-in text-xs text-slate-300">
+                  {/* Google Chrome / Brave / Edge */}
+                  <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                      <Chrome className="w-4 h-4" />
+                      <span>Metode 1: Chrome / Edge / Brave (Android)</span>
+                    </div>
+                    <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-300 font-medium leading-relaxed">
+                      <li>Ketuk ikon <strong className="text-amber-400">tiga titik vertikal (⋮)</strong> di sudut kanan atas browser.</li>
+                      <li>Pilih menu <strong className="text-amber-400">"Instal aplikasi"</strong> (atau *"Tambahkan ke Layar Utama"*).</li>
+                      <li>Ketuk <strong className="text-amber-400">"Instal"</strong> pada jendela konfirmasi yang muncul di layar.</li>
+                      <li>Aplikasi akan terpasang di HP Anda dengan ikon mandiri tanpa bar browser!</li>
+                    </ol>
+                  </div>
+
+                  {/* Samsung / Xiaomi / Oppo / Vivo / UC */}
+                  <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                      <Smartphone className="w-4 h-4" />
+                      <span>Metode 2: Samsung / Xiaomi / Vivo / Oppo / UC</span>
+                    </div>
+                    <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-300 font-medium leading-relaxed">
+                      <li>Ketuk menu browser <strong className="text-amber-400">(ikon ≡ atau ⋮)</strong> di kanan bawah / atas layar.</li>
+                      <li>Pilih menu <strong className="text-amber-400">"Tambah Halaman ke"</strong> atau <strong className="text-amber-400">"Pasang Aplikasi PWA"</strong>.</li>
+                      <li>Pilih <strong className="text-amber-400">"Layar Utama" (Home Screen)</strong> lalu ketuk <strong className="text-amber-400">"Tambah / Instal"</strong>.</li>
+                    </ol>
+                  </div>
+
+                  {/* WhatsApp / In-App Browser Warning */}
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 flex gap-2.5">
+                    <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <p className="text-[10px] text-amber-200 leading-relaxed font-medium">
+                      <strong className="text-amber-400 block uppercase tracking-wide text-[9px] mb-0.5">DIBUKA DARI WHATSAPP / INSTAGRAM?</strong>
+                      Jika Anda membuka website dari dalam pesan WhatsApp atau IG, ketuk <strong>tiga titik (⋮)</strong> di kanan atas layar lalu pilih <strong>"Buka di Browser"</strong> / <strong>"Buka di Chrome"</strong> agar aplikasi terpasang sempurna.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB CONTENT: IOS (SAFARI) */}
+              {activeGuideTab === 'ios' && (
+                <div className="space-y-4 animate-fade-in text-xs text-slate-300">
+                  <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                      <Compass className="w-4 h-4" />
+                      <span>Browser Safari (iPhone / iPad)</span>
+                    </div>
+
+                    <div className="space-y-2 text-[11px]">
+                      <div className="flex items-center gap-2.5 p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                        <span className="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">1</span>
+                        <p>Pastikan Anda membuka website ini menggunakan browser bawaan <strong className="text-amber-400">Safari</strong>.</p>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                        <span className="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">2</span>
+                        <p>Ketuk tombol <strong className="text-amber-400">Share 📤</strong> (kotak dengan panah ke atas) di bagian bawah layar.</p>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                        <span className="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">3</span>
+                        <p>Gulir ke bawah lalu ketuk opsi <strong className="text-amber-400">'Tambahkan ke Layar Utama' (Add to Home Screen)</strong>.</p>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                        <span className="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">4</span>
+                        <p>Ketuk <strong className="text-amber-400">'Tambah' (Add)</strong> di kanan atas untuk menyelesaikan.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-2 flex gap-2">
+                {deferredPrompt && (
+                  <button
+                    onClick={() => {
+                      setShowGuideModal(false);
+                      handleInstallClick();
+                    }}
+                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Instal Otomatis</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowGuideModal(false)}
+                  className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-2xl transition-all cursor-pointer text-center"
+                >
+                  Selesai Membaca
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

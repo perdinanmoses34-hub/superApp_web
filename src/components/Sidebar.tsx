@@ -27,6 +27,8 @@ import {
   User,
   Coins,
   Heart,
+  Smartphone,
+  Download,
 } from 'lucide-react';
 import { Role, User as UserType, ChurchSettings } from '../types';
 
@@ -282,6 +284,24 @@ export default function Sidebar({
 
       {/* System Status Block & User Switcher */}
       <div className="p-4 bg-slate-900/40 border-t border-slate-800/80 space-y-3">
+        {/* PWA App Install Button */}
+        <button
+          onClick={() => {
+            if ((window as any).triggerPwaInstall) {
+              (window as any).triggerPwaInstall();
+            } else if ((window as any).openPwaGuide) {
+              (window as any).openPwaGuide();
+            }
+          }}
+          className="w-full py-2.5 px-3 bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent hover:bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30 transition-all flex items-center justify-between text-xs font-bold cursor-pointer group"
+        >
+          <div className="flex items-center gap-2">
+            <Smartphone className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span>Instal Aplikasi HP</span>
+          </div>
+          <Download className="w-3.5 h-3.5 text-amber-400" />
+        </button>
+
         {/* System Status widget from sleek design HTML */}
         <div className="bg-slate-800/40 border border-slate-800/60 rounded-xl p-3">
           <div className="flex items-center justify-between mb-1.5">

@@ -40,7 +40,6 @@ import BottomNav from './components/BottomNav';
 import DashboardAdmin from './components/DashboardAdmin';
 import DashboardJemaat from './components/DashboardJemaat';
 import AdminModules from './components/AdminModules';
-import InstallPrompt from './components/InstallPrompt';
 import PwaInstallAndSplash from './components/PwaInstallAndSplash';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -268,9 +267,6 @@ export default function App() {
   return (
     <div className={`min-h-screen flex flex-col ${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gray-50 text-gray-900'}`}>
       
-      {/* Floating Install Prompt Banner */}
-      <InstallPrompt />
-
       <AnimatePresence>
         {isLocked ? (
           /* Simulated Secure Login Screen - Beautifully Stacked Vertical Layout */
