@@ -14,7 +14,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
 
   // PWA Install States
   const [deferredPrompt, setDeferredPrompt] = useState<any>((window as any).deferredPrompt || null);
-  const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [showInstallBanner, setShowInstallBanner] = useState(true);
+  const [isBannerMinimized, setIsBannerMinimized] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
   const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'ios'>('android');
@@ -57,6 +58,11 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     setDeviceInfo({ isAndroid, isIos, isMobile, isInAppBrowser, browserName });
     setActiveGuideTab(isIos ? 'ios' : 'android');
 
+    // Always show banner for non-standalone mode
+    if (!isStandaloneMode) {
+      setShowInstallBanner(true);
+    }
+
     // Animated Splash Progress Effect
     const interval = setInterval(() => {
       setSplashProgress((prev) => {
@@ -72,13 +78,10 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     // Function to decide whether to show floating install banner
     const checkAndShowBanner = () => {
       if (isStandaloneMode) return;
-      const lastDismiss = localStorage.getItem('pwa_install_dismissed');
-      if (!lastDismiss || Date.now() - Number(lastDismiss) > 24 * 60 * 60 * 1000) {
-        setShowInstallBanner(true);
-      }
+      setShowInstallBanner(true);
     };
 
-    // Global prompt capture handler for POCO / Xiaomi / Samsung / Infinix
+    // Global prompt capture handler for POCO / Xiaomi / Samsung / Infinix / All Androids
     (window as any).onPwaPromptCaptured = (e: any) => {
       console.log('[PWA Component] Prompt captured via global handler:', e);
       setDeferredPrompt(e);
@@ -112,11 +115,6 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     window.addEventListener('pointerdown', handleUserInteraction, { once: true });
     window.addEventListener('touchstart', handleUserInteraction, { once: true });
 
-    // Ensure banner shows up on all non-standalone mobile devices after splash screen
-    if (isMobile && !isStandaloneMode) {
-      setTimeout(checkAndShowBanner, 1500);
-    }
-
     // Register global window helper for manual triggers
     (window as any).triggerPwaInstall = () => {
       handleInstallClick();
@@ -142,7 +140,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         setIsInstalling(true);
         promptEvent.prompt();
         const choiceResult = await promptEvent.userChoice;
-        if (choiceResult.outcome === 'accepted') {
+        if (choiceResult && choiceResult.outcome === 'accepted') {
           console.log('User accepted the PWA install prompt');
           setShowInstallBanner(false);
           setShowInstallModal(false);
@@ -152,23 +150,25 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         }
       } catch (err) {
         console.error('Failed to trigger native install prompt:', err);
-        // Direct install modal instead of text guide
+        // Direct install modal
         setShowInstallModal(true);
       } finally {
         setIsInstalling(false);
       }
     } else {
       // If deferredPrompt is not yet available (e.g. POCO / Xiaomi / WebView)
-      // Open direct 1-tap confirmation modal (setShowInstallModal) so user can tap to install
-      // NEVER dump them into multi-step text guide!
-      setShowInstallModal(true);
+      if (deviceInfo.isInAppBrowser && deviceInfo.isAndroid) {
+        handleOpenInChrome();
+      } else {
+        setShowInstallModal(true);
+      }
     }
   };
 
   const handleOpenInChrome = () => {
     const currentUrl = window.location.href;
     if (deviceInfo.isAndroid) {
-      // Intent URL to open directly in Google Chrome on Android (POCO/Xiaomi/Samsung)
+      // Intent URL to open directly in Google Chrome on Android (POCO/Xiaomi/Samsung/Infinix)
       const cleanUrl = currentUrl.replace(/^https?:\/\//, '');
       window.location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
     } else {
@@ -177,8 +177,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
   };
 
   const handleDismissBanner = () => {
-    setShowInstallBanner(false);
-    localStorage.setItem('pwa_install_dismissed', String(Date.now()));
+    // Minimize to compact badge instead of destroying
+    setIsBannerMinimized(true);
   };
 
   return (
@@ -257,9 +257,63 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         )}
       </AnimatePresence>
 
-      {/* 2. FLOATING PWA INSTALL PROMPT BANNER (FOR ALL ANDROID & IOS DEVICES) */}
+      {/* 2. PERSISTENT TOP INSTALLATION HEADER BAR & FLOATING BANNER FOR ALL ANDROID DEVICES */}
+      {!isStandalone && (
+        <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-slate-950 px-3 py-2 border-b border-amber-400/40 shadow-md flex items-center justify-between gap-2 z-[70] relative text-xs font-bold">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-6 h-6 rounded-lg bg-slate-950 p-0.5 shrink-0 overflow-hidden border border-amber-300/40 flex items-center justify-center">
+              <img src="./icon.svg" alt="Gereja Logo" className="w-full h-full object-contain" />
+            </div>
+            <div className="truncate">
+              <span className="font-black text-slate-950 uppercase tracking-tight block sm:inline">
+                Aplikasi CMS Gereja Android
+              </span>
+              <span className="hidden sm:inline text-[11px] text-slate-900 font-semibold ml-2">
+                • Pasang langsung ke HP tanpa Play Store
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={handleInstallClick}
+              disabled={isInstalling}
+              className="px-3 py-1.5 bg-slate-950 hover:bg-slate-900 text-amber-400 hover:text-amber-300 font-black text-[11px] rounded-xl shadow transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>{isInstalling ? 'Memasang...' : '⚡ INSTAL HP'}</span>
+            </button>
+            <button
+              onClick={() => setShowGuideModal(true)}
+              className="p-1.5 bg-slate-900/10 hover:bg-slate-900/20 text-slate-950 rounded-lg text-xs transition-colors cursor-pointer"
+              title="Bantuan Instalasi"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 2A. MINIMIZED FLOATING BADGE (SO INSTALL METHOD IS NEVER LOST) */}
+      {showInstallBanner && !isStandalone && isBannerMinimized && (
+        <motion.button
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsBannerMinimized(false)}
+          className="fixed bottom-20 right-4 z-[85] bg-slate-900/95 backdrop-blur-md text-amber-400 p-2.5 px-4 rounded-full border border-amber-500/40 shadow-2xl flex items-center gap-2 text-xs font-black cursor-pointer group active:scale-95"
+        >
+          <div className="w-6 h-6 rounded-lg bg-amber-500 p-0.5 shrink-0 overflow-hidden flex items-center justify-center">
+            <img src="./icon.svg" alt="Church App" className="w-full h-full object-contain" />
+          </div>
+          <span className="text-white">📲 Instal Aplikasi HP</span>
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+        </motion.button>
+      )}
+
+      {/* 2B. FLOATING PWA INSTALL PROMPT BANNER (EXPANDED) */}
       <AnimatePresence>
-        {showInstallBanner && !isStandalone && (
+        {showInstallBanner && !isStandalone && !isBannerMinimized && (
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -288,6 +342,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
               <button
                 onClick={handleDismissBanner}
                 className="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-full transition-colors cursor-pointer"
+                title="Kecilkan"
               >
                 <X className="w-4 h-4" />
               </button>
