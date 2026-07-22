@@ -1,0 +1,1058 @@
+{
+  "activity_logs": [
+    {
+      "userId": "usr_admin",
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userName": "Siti Rahmawati",
+      "browser": "Chrome",
+      "role": "ADMIN",
+      "id": "log_1784710042517_rg6sk",
+      "date": "2026-07-22T08:47:22.517Z",
+      "action": "LOGIN",
+      "status": "success"
+    },
+    {
+      "browser": "Chrome",
+      "userName": "Siti Rahmawati",
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "status": "success",
+      "action": "LOGIN",
+      "date": "2026-07-22T08:25:00.524Z",
+      "id": "log_1784708700524_grse4",
+      "role": "ADMIN"
+    },
+    {
+      "date": "2026-07-22T06:32:55.874Z",
+      "id": "log_1784701975874_dknht",
+      "role": "SUPER_ADMIN",
+      "action": "SWAP_SESSION_ROLE",
+      "status": "success",
+      "userId": "usr_superadmin",
+      "ip": "127.0.0.1 (Local Client)",
+      "device": "Desktop",
+      "userName": "Pnt. Budi Santoso",
+      "browser": "Chrome",
+      "afterData": "Sesi dialihkan ke peran SUPER_ADMIN"
+    },
+    {
+      "id": "log_1784701922019_eg7ct",
+      "role": "ADMIN",
+      "date": "2026-07-22T06:32:02.019Z",
+      "action": "LOGIN",
+      "status": "success",
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "browser": "Chrome"
+    },
+    {
+      "browser": "Chrome",
+      "userId": "usr_admin",
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userName": "Siti Rahmawati",
+      "action": "LOGIN",
+      "status": "success",
+      "role": "ADMIN",
+      "id": "log_1784700406709_28wik",
+      "date": "2026-07-22T06:06:46.709Z"
+    },
+    {
+      "browser": "Chrome",
+      "ip": "127.0.0.1 (Local Client)",
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "status": "success",
+      "action": "LOGIN",
+      "date": "2026-07-22T04:40:07.436Z",
+      "id": "log_1784695207436_i47xh",
+      "role": "ADMIN"
+    },
+    {
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "device": "Android Mobile",
+      "afterData": "{\"id\":\"notif_1784691833867\",\"title\":\"Ibadah hari ini\",\"content\":\"Hari ini\",\"targetGroup\":\"all\",\"sentDate\":\"2026-07-22T03:43:53.867Z\",\"sentBy\":\"admin@church.com\"}",
+      "browser": "Chrome",
+      "date": "2026-07-22T03:43:53.870Z",
+      "id": "log_1784691833870_ktbrx",
+      "role": "ADMIN",
+      "action": "BROADCAST_NOTIFICATION",
+      "status": "success"
+    },
+    {
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_superadmin",
+      "userName": "Pnt. Budi Santoso",
+      "browser": "Chrome",
+      "afterData": "Sesi dialihkan ke peran SUPER_ADMIN",
+      "date": "2026-07-22T03:35:54.569Z",
+      "role": "SUPER_ADMIN",
+      "id": "log_1784691354569_20ebz",
+      "status": "success",
+      "action": "SWAP_SESSION_ROLE"
+    },
+    {
+      "status": "success",
+      "action": "LOGIN",
+      "date": "2026-07-22T03:23:42.181Z",
+      "role": "ADMIN",
+      "id": "log_1784690622181_o65lw",
+      "browser": "Chrome",
+      "device": "Desktop",
+      "userId": "usr_admin",
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)"
+    },
+    {
+      "id": "log_1784690608243_8v5y9",
+      "role": "JEMAAT",
+      "date": "2026-07-22T03:23:28.243Z",
+      "status": "success",
+      "action": "LOGOUT",
+      "userName": "Andi Wijaya",
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_jemaat",
+      "browser": "Chrome"
+    },
+    {
+      "role": "JEMAAT",
+      "id": "log_1784690558248_zwawq",
+      "date": "2026-07-22T03:22:38.248Z",
+      "status": "success",
+      "action": "LOGIN",
+      "userId": "usr_jemaat",
+      "device": "Desktop",
+      "userName": "Andi Wijaya",
+      "ip": "127.0.0.1 (Local Client)",
+      "browser": "Chrome"
+    },
+    {
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "browser": "Chrome",
+      "id": "log_1784690536244_9n5jg",
+      "role": "ADMIN",
+      "date": "2026-07-22T03:22:16.244Z",
+      "action": "LOGOUT",
+      "status": "success"
+    },
+    {
+      "browser": "Chrome",
+      "device": "Android Mobile",
+      "userName": "Andi Wijaya",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_jemaat",
+      "action": "LOGOUT",
+      "status": "success",
+      "id": "log_1784689356064_18gah",
+      "role": "JEMAAT",
+      "date": "2026-07-22T03:02:36.064Z"
+    },
+    {
+      "date": "2026-07-22T02:03:52.452Z",
+      "id": "log_1784685832452_oxsjn",
+      "role": "ADMIN",
+      "status": "success",
+      "action": "LOGIN",
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "browser": "Chrome"
+    },
+    {
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "browser": "Chrome",
+      "role": "ADMIN",
+      "id": "log_1784683730971_j9sbg",
+      "date": "2026-07-22T01:28:50.971Z",
+      "action": "LOGOUT",
+      "status": "success"
+    },
+    {
+      "browser": "Chrome",
+      "ip": "127.0.0.1 (Local Client)",
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "status": "success",
+      "action": "LOGIN",
+      "role": "ADMIN",
+      "id": "log_1784683685080_ukj8q",
+      "date": "2026-07-22T01:28:05.080Z"
+    },
+    {
+      "browser": "Chrome",
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "ip": "127.0.0.1 (Local Client)",
+      "status": "success",
+      "action": "LOGOUT",
+      "role": "ADMIN",
+      "id": "log_1784682527859_k8z5w",
+      "date": "2026-07-22T01:08:47.859Z"
+    },
+    {
+      "device": "Desktop",
+      "ip": "127.0.0.1 (Local Client)",
+      "userName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "browser": "Chrome",
+      "role": "ADMIN",
+      "id": "log_1784682313512_md7ey",
+      "date": "2026-07-22T01:05:13.512Z",
+      "status": "success",
+      "action": "LOGIN"
+    },
+    {
+      "browser": "Chrome",
+      "ip": "127.0.0.1 (Local Client)",
+      "userName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "device": "Desktop",
+      "status": "success",
+      "action": "LOGOUT",
+      "role": "ADMIN",
+      "id": "log_1784682299038_l8twv",
+      "date": "2026-07-22T01:04:59.038Z"
+    },
+    {
+      "id": "log_1784681761640_7as62",
+      "role": "ADMIN",
+      "date": "2026-07-22T00:56:01.640Z",
+      "status": "success",
+      "action": "LOGIN",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "browser": "Chrome"
+    },
+    {
+      "device": "Desktop",
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "browser": "Chrome",
+      "date": "2026-07-22T00:55:43.253Z",
+      "role": "ADMIN",
+      "id": "log_1784681743253_6ys4i",
+      "status": "success",
+      "action": "LOGOUT"
+    },
+    {
+      "id": "log_1784636637237_19ps9",
+      "role": "ADMIN",
+      "date": "2026-07-21T12:23:57.237Z",
+      "action": "LOGIN",
+      "status": "success",
+      "userName": "Siti Rahmawati",
+      "ip": "127.0.0.1 (Local Client)",
+      "userId": "usr_admin",
+      "device": "Desktop",
+      "browser": "Chrome"
+    },
+    {
+      "action": "LOGIN",
+      "status": "success",
+      "date": "2026-07-20T08:00:00",
+      "id": "log_1",
+      "role": "SUPER_ADMIN",
+      "browser": "Chrome 125.0",
+      "device": "Desktop Windows 11",
+      "userId": "usr_superadmin",
+      "userName": "Pnt. Budi Santoso",
+      "ip": "192.168.1.50"
+    },
+    {
+      "date": "2026-07-19T14:30:00",
+      "role": "ADMIN",
+      "id": "log_2",
+      "action": "CREATE_NEWS",
+      "status": "success",
+      "userId": "usr_admin",
+      "device": "iPhone 15 Pro",
+      "ip": "112.199.12.87",
+      "userName": "Siti Rahmawati",
+      "browser": "Safari Mobile 17.4",
+      "afterData": "Judul: Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026"
+    }
+  ],
+  "announcements": [
+    {
+      "category": "Kegiatan Sosial",
+      "id": "ann_2",
+      "isPinned": false,
+      "publishDate": "2026-07-18",
+      "title": "Aksi Sosial Donor Darah & Pengobatan Gratis",
+      "content": "Komisi Pelayanan Sosial CMS bekerja sama dengan Palang Merah Indonesia (PMI) akan mengadakan aksi sosial Donor Darah dan Pengobatan Gratis untuk warga sekitar gereja. Acara diadakan pada Sabtu, 25 Juli 2026 mulai pukul 08.00 - 13.00 WIB di Aula Serbaguna CMS. Mari berpartisipasi!",
+      "expiryDate": "2026-07-26",
+      "priority": "medium"
+    },
+    {
+      "publishDate": "2026-07-22",
+      "isPinned": true,
+      "id": "ann_1784691643657",
+      "category": "Warta",
+      "expiryDate": "2026-08-21",
+      "priority": "high",
+      "title": "Ibadah",
+      "content": "Silahkan ikuti"
+    }
+  ],
+  "comments": [
+    {
+      "targetTitle": "Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta",
+      "targetType": "news",
+      "likes": 12,
+      "userEmail": "jemaat@church.com",
+      "userName": "Andi Wijaya",
+      "userPhoto": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      "status": "approved",
+      "targetId": "news_1",
+      "content": "Luar biasa sekali acaranya! Firman Tuhan yang disampaikan sangat membakar semangat kami para pemuda agar selalu setia melayani Tuhan di gereja lokal kita.",
+      "date": "2026-07-19T21:40:00",
+      "id": "cmt_1"
+    },
+    {
+      "targetType": "news",
+      "targetTitle": "Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta",
+      "userEmail": "hendra.saputra@gmail.com",
+      "userName": "Hendra Saputra",
+      "likes": 8,
+      "status": "approved",
+      "content": "Praise the Lord! Panitia sungguh bekerja luar biasa mempersiapkan sound, live, dan drama musikalnya. Ditunggu retreat gabungan berikutnya!",
+      "targetId": "news_1",
+      "date": "2026-07-20T08:15:00",
+      "id": "cmt_2"
+    },
+    {
+      "date": "2026-07-20T06:10:00",
+      "id": "cmt_3",
+      "status": "approved",
+      "content": "Renungan yang sangat menguatkan hati di hari Senin pagi yang sibuk ini. Terima kasih kepada tim penulis renungan gereja CMS, Tuhan Yesus memberkati!",
+      "targetId": "dev_1",
+      "targetType": "devotion",
+      "targetTitle": "Berjalan dalam Terang",
+      "userName": "Merry Angriani",
+      "userEmail": "merry.ang@gmail.com",
+      "likes": 15
+    },
+    {
+      "id": "cmt_4",
+      "date": "2026-07-20T12:00:00",
+      "targetId": "news_1",
+      "content": "DAPATKAN DISKON SEPATU OLAHRAGA TERBAIK HANYA HARI INI DI LINK KAMI!!! CHEAP SHOES HERE!",
+      "status": "spam",
+      "likes": 0,
+      "userEmail": "spambot@malicious.com",
+      "userName": "Spam Bot 2026",
+      "targetTitle": "Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta",
+      "targetType": "news"
+    }
+  ],
+  "congregations": [
+    {
+      "isMarried": false,
+      "id": "cong_1784685192752",
+      "isBaptized": true,
+      "joinDate": "2026-07-22",
+      "email": "tn.timbu88@gmail.com",
+      "ministry": "Praise Worship",
+      "familyMembers": "Lajang",
+      "commission": "Anak",
+      "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+      "phone": "082224254282",
+      "address": "konawe",
+      "name": "Yeni Ochtavian Paujung"
+    },
+    {
+      "joinDate": "2026-07-22",
+      "isBaptized": true,
+      "isMarried": false,
+      "id": "cong_1784689375138",
+      "familyMembers": "Lajang",
+      "ministry": "Praise Worship",
+      "email": "tn.timbu88@gmail.com",
+      "commission": "Wanita",
+      "name": "Eklesia",
+      "address": "Konawe",
+      "phone": "082224254282",
+      "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"
+    },
+    {
+      "address": "Konawe",
+      "phone": "085742436625",
+      "name": "Brielle",
+      "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+      "commission": "Anak",
+      "familyMembers": "Lajang",
+      "ministry": "Praise Worship",
+      "email": "moni150388@gmail.com",
+      "joinDate": "2026-07-22",
+      "id": "cong_1784689452403",
+      "isMarried": false,
+      "isBaptized": true
+    }
+  ],
+  "devotions": [
+    {
+      "audioUrl": "#",
+      "title": "Berjalan dalam Terang",
+      "pdfUrl": "#",
+      "category": "Iman & Integritas",
+      "publishDate": "2026-07-20",
+      "content": "Dalam kehidupan sehari-hari, kita seringkali dihadapkan pada pilihan-pilihan sulit. Firman Tuhan hari ini mengingatkan kita untuk selalu mengarahkan langkah kita pada kebenaran Allah. \"Tetapi jika kita hidup di dalam terang sama seperti Dia ada di dalam terang, maka kita beroleh persekutuan seorang dengan yang lain...\" Berjalan dalam terang berarti hidup dengan kejujuran, integritas, dan tanpa ada hal tersembunyi yang mendatangkan dosa. Ketika kita melakukan kebenaran, damai sejahtera surgawi akan senantiasa memenuhi hati kita.",
+      "scripture": "1 Yohanes 1:7",
+      "id": "dev_1",
+      "coverUrl": "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "title": "Kekuatan di Tengah Kelemahan",
+      "content": "Manusia cenderung ingin terlihat kuat, sukses, dan mandiri. Namun, di hadapan Tuhan, pengakuan akan keterbatasan kita justru membuka jalan bagi kuasa-Nya yang luar biasa bekerja. Paulus mengalaminya sendiri saat dia memohon agar duri dalam dagingnya diangkat. Jawaban Tuhan sangat indah: \"Cukuplah kasih karunia-Ku bagimu, sebab di dalam kelemahanlah kuasa-Ku menjadi sempurna.\" Ketika kita merasa lemah, lelah, dan tak berdaya, serahkanlah segalanya dalam doa. Kuasa Roh Kudus akan memampukan kita melakukan hal-hal besar melampaui logika kita.",
+      "scripture": "2 Korintus 12:9",
+      "coverUrl": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80",
+      "category": "Penghiburan",
+      "id": "dev_2",
+      "publishDate": "2026-07-19"
+    }
+  ],
+  "event_registrations": [
+    {
+      "attended": false,
+      "qrCodeUrl": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=REG-EVT1-ANDIWIJAYA",
+      "id": "reg_1",
+      "eventId": "evt_1",
+      "status": "approved",
+      "registerDate": "2026-07-19T10:14:22",
+      "userId": "usr_jemaat",
+      "userName": "Andi Wijaya",
+      "userEmail": "jemaat@church.com",
+      "phone": "081234567803",
+      "eventTitle": "Seminar Hubungan Keluarga & Pasangan Bahagia 2026"
+    }
+  ],
+  "events": [
+    {
+      "id": "moses",
+      "title": "moses",
+      "content": "moses",
+      "bannerUrl": "moses",
+      "location": "moses",
+      "googleMapsUrl": "moses",
+      "dateTime": "moses",
+      "countdownDate": "moses",
+      "quota": "moses",
+      "registeredCount": "moses",
+      "status": "moses",
+      "isRegistrationOpen": "moses"
+    }
+  ],
+  "gallery": [
+    {
+      "url": "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=600&auto=format&fit=crop&q=80",
+      "type": "image",
+      "title": "Keceriaan Kebaktian Sekolah Minggu (SM) CMS",
+      "category": "Sekolah Minggu",
+      "id": "gal_1",
+      "uploadDate": "2026-07-10"
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80",
+      "title": "Pelayanan Paduan Suara Dewasa CMS di Ibadah Raya",
+      "id": "gal_2",
+      "category": "Ibadah Raya",
+      "uploadDate": "2026-07-12"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&auto=format&fit=crop&q=80",
+      "type": "video",
+      "title": "Video Dokumentasi Retreat Pemuda CMS 2026",
+      "uploadDate": "2026-07-15",
+      "category": "Pemuda",
+      "id": "gal_3"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&auto=format&fit=crop&q=80",
+      "type": "image",
+      "title": "Aksi Bersih-bersih Lingkungan Sekitar Gereja",
+      "uploadDate": "2026-07-16",
+      "id": "gal_4",
+      "category": "Sosial"
+    }
+  ],
+  "ministries": [
+    {
+      "leader": "Sdr. David Haryono",
+      "name": "Komisi Musik & Praise Worship",
+      "contact": "0812-7777-6661",
+      "schedule": "Latihan: Setiap Hari Sabtu, pukul 16.00 WIB di Main Sanctuary",
+      "category": "Musik & Pujian",
+      "id": "min_1",
+      "description": "Melayani musik, penyanyi latar (backing vocal), song leader, serta pemimpin pujian (Worship Leader) untuk Ibadah Raya 1, 2, dan 3."
+    },
+    {
+      "contact": "0812-7777-6662",
+      "name": "Pelayanan Guru Sekolah Minggu (SM)",
+      "leader": "Ibu Listiawati",
+      "id": "min_2",
+      "category": "Pendidikan Anak",
+      "description": "Mendidik anak-anak jemaat usia batita hingga kelas 6 SD dalam kebenaran firman Tuhan dengan metode interaktif, cerita Alkitab, dan kerajinan tangan.",
+      "schedule": "Rapat Kurikulum: Minggu pertama tiap bulan, pukul 13.00 WIB"
+    },
+    {
+      "description": "Bertanggung jawab atas jalannya tata suara (sound system), kamera live streaming YouTube, pengoperasian slide proyektor, serta publikasi digital sosial media gereja.",
+      "category": "Media & Teknologi",
+      "id": "min_3",
+      "schedule": "Persiapan Teknis: Hari Minggu mulai pukul 06.30 WIB",
+      "contact": "0812-7777-6663",
+      "name": "Komisi MultiMedia, Live & Sound",
+      "leader": "Sdr. Yusuf Setiawan"
+    }
+  ],
+  "news": [
+    {
+      "commentsCount": 3,
+      "id": "news_1",
+      "coverUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
+      "status": "published",
+      "views": 489,
+      "content": "Kebaktian Kebangunan Rohani (KKR) Tahunan Pemuda dan Remaja CMS sukses diselenggarakan pada hari Sabtu kemarin. Bertempat di Auditorium CMS, KKR bertema \"Shine Your Light\" ini dihadiri oleh lebih dari 350 anak muda dari berbagai wilayah. Pembicara Pdt. Michael Yosef menyampaikan pesan yang membakar semangat pemuda untuk tetap berpegang teguh pada firman Tuhan di era digital yang penuh tantangan ini. Acara juga dimeriahkan oleh penampilan Youth Choir dan drama musikal spektakuler.",
+      "publishDate": "2026-07-19",
+      "category": "Pemuda",
+      "likes": 124,
+      "author": "Siti Rahmawati",
+      "title": "Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta"
+    },
+    {
+      "views": 290,
+      "status": "published",
+      "content": "CMS (SYSTEM MANAGEMENT CHURCH) melalui Komisi Diakonia dan Pelayanan Masyarakat bergerak cepat menyalurkan bantuan logistik darurat kepada korban bencana kebakaran di pemukiman padat penduduk Tambora, Jakarta Barat. Bantuan berupa bahan makanan pokok, pakaian layak pakai, selimut, air mineral, serta obat-obatan diserahkan langsung oleh perwakilan Majelis Jemaat kepada posko darurat setempat. Kami mengucapkan terima kasih yang sebesar-besarnya atas donasi materiil dan doa dari jemaat sekalian.",
+      "coverUrl": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&auto=format&fit=crop&q=80",
+      "id": "news_2",
+      "commentsCount": 1,
+      "title": "CMS Menyalurkan Bantuan Sosial untuk Korban Kebakaran Tambora",
+      "author": "Pnt. Budi Santoso",
+      "publishDate": "2026-07-14",
+      "likes": 89,
+      "category": "Pelayanan Sosial"
+    },
+    {
+      "coverUrl": "https://images.unsplash.com/photo-1544982503-9f984c14501a?w=800&auto=format&fit=crop&q=80",
+      "commentsCount": 0,
+      "id": "news_3",
+      "content": "Draf rencana kepanitiaan Perayaan Natal 2026 dan Tahun Baru 2027 telah disusun. Dokumen ini membahas struktur panitia, tema perayaan, serta estimasi anggaran per divisi. Pertemuan perdana seluruh calon panitia dijadwalkan pada pertengahan Agustus untuk mematangkan konsep acara.",
+      "views": 5,
+      "status": "draft",
+      "likes": 0,
+      "category": "Internal",
+      "publishDate": "2026-07-20",
+      "title": "Persiapan Pelayanan Natal dan Tata Tertib Panitia Baru",
+      "author": "Siti Rahmawati"
+    }
+  ],
+  "notifications": [
+    {
+      "targetGroup": "all",
+      "sentDate": "2026-07-22T03:43:53.867Z",
+      "title": "Ibadah hari ini",
+      "content": "Hari ini",
+      "sentBy": "admin@church.com",
+      "id": "notif_1784691833867"
+    },
+    {
+      "id": "notif_1784691826416",
+      "title": "Ibadah hari ini",
+      "sentDate": "2026-07-22T03:43:46.416Z",
+      "sentBy": "admin@church.com",
+      "content": "Hari ini",
+      "targetGroup": "all"
+    },
+    {
+      "id": "notif_1784691705741",
+      "targetGroup": "all",
+      "sentDate": "2026-07-22T03:41:45.741Z",
+      "title": "Ibadah",
+      "content": "Hari ini",
+      "sentBy": "admin@church.com"
+    },
+    {
+      "id": "notif_1784689590707",
+      "targetGroup": "all",
+      "title": "Pengumuan",
+      "sentDate": "2026-07-22T03:06:30.707Z",
+      "content": "Ibadah hari ini",
+      "sentBy": "admin@church.com"
+    },
+    {
+      "id": "notif_1",
+      "targetGroup": "all",
+      "title": "Informasi Ibadah Paskah 2026",
+      "sentDate": "2026-07-15T08:00:00",
+      "sentBy": "admin@church.com",
+      "content": "Jadwal lengkap ibadah paskah CMS telah dipublikasikan di menu Pengumuman. Segera cek detail jam pelayanan."
+    }
+  ],
+  "organizations": [
+    {
+      "contact": "samuel.wijaya@gkhk.or.id",
+      "order": 1,
+      "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+      "name": "Pdt. Dr. Samuel Wijaya",
+      "period": "Masa Bakti: 2020 - 2028",
+      "id": "org_1",
+      "roleName": "Pendeta Utama",
+      "description": "Bertanggung jawab penuh atas pelayanan kerohanian, penggembalaan, dan arah visi strategis pengajaran firman di CMS Jakarta."
+    },
+    {
+      "name": "Pnt. Budi Santoso",
+      "order": 2,
+      "contact": "budi.santoso@gkhk.or.id",
+      "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "period": "Masa Bakti: 2024 - 2029",
+      "id": "org_2",
+      "roleName": "Sekretaris Majelis & Penatua Jemaat",
+      "description": "Mengoordinasikan administrasi umum, sekretariat gereja, tata kelola rapat majelis, dan pelayanan jemaat dewasa."
+    },
+    {
+      "period": "Masa Bakti: 2024 - 2029",
+      "id": "org_3",
+      "roleName": "Bendahara Majelis Jemaat",
+      "description": "Mengelola keuangan operasional gereja, pelaporan anggaran tahunan, diakonia kasih, dan verifikasi keuangan komisi-komisi.",
+      "order": 3,
+      "contact": "elizabeth.tan@gkhk.or.id",
+      "photoUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+      "name": "Dk. Elizabeth Tan"
+    }
+  ],
+  "prayer_requests": [
+    {
+      "userId": "usr_jemaat",
+      "id": "pry_1",
+      "userName": "Andi Wijaya",
+      "isPrivate": false,
+      "date": "2026-07-20T14:20:00",
+      "content": "Mohon dukungan doa bagi nenek saya, Ibu Maria Wijaya, yang saat ini sedang dirawat di RS Siloam karena penyakit stroke ringan agar lekas dipulihkan oleh kuasa Tuhan.",
+      "phone": "081234567803",
+      "status": "prayed"
+    },
+    {
+      "userId": "usr_jemaat",
+      "id": "pry_2",
+      "userName": "Andi Wijaya",
+      "isPrivate": true,
+      "date": "2026-07-20T15:00:00",
+      "content": "Mohon doa khusus pribadi untuk kelancaran tes wawancara kerja saya pada hari Rabu esok agar dimampukan oleh Tuhan.",
+      "phone": "081234567803",
+      "status": "pending"
+    }
+  ],
+  "service_schedules": [
+    {
+      "sessionName": "Sesi I (Pagi)",
+      "worshipLeader": "Sdr. David Haryono",
+      "id": "sch_1",
+      "isOnline": false,
+      "category": "Ibadah Raya",
+      "title": "Ibadah Raya 1",
+      "dateDay": "Setiap Hari Minggu",
+      "location": "Main Sanctuary (Lt. 1)",
+      "time": "07.00 WIB",
+      "speaker": "Pdt. Dr. Samuel Wijaya"
+    },
+    {
+      "category": "Ibadah Raya",
+      "time": "09.30 WIB",
+      "speaker": "Pdt. Dr. Samuel Wijaya",
+      "title": "Ibadah Raya 2",
+      "dateDay": "Setiap Hari Minggu",
+      "location": "Main Sanctuary (Lt. 1) & Live Streaming",
+      "isOnline": true,
+      "sessionName": "Sesi II (Siang)",
+      "worshipLeader": "Sdr. Michael Yosef",
+      "id": "sch_2"
+    },
+    {
+      "speaker": "Pst. Michael Yosef",
+      "time": "16.30 WIB",
+      "location": "Auditorium Lt. 3",
+      "dateDay": "Setiap Hari Minggu",
+      "title": "Ibadah Pemuda (Youth)",
+      "category": "Pemuda",
+      "isOnline": false,
+      "id": "sch_3",
+      "worshipLeader": "Sdr. Andi Wijaya",
+      "sessionName": "Sesi III (Sore)"
+    },
+    {
+      "isOnline": true,
+      "worshipLeader": "Sdri. Clara Shinta",
+      "sessionName": "Doa Malam",
+      "id": "sch_4",
+      "category": "Persekutuan",
+      "time": "19.00 WIB",
+      "speaker": "Pnt. Budi Santoso",
+      "title": "Persekutuan Doa Syafaat",
+      "dateDay": "Setiap Hari Rabu",
+      "location": "Ruang Doa Lt. 2 & Zoom"
+    },
+    {
+      "id": "sch_1784705448693",
+      "worshipLeader": "",
+      "sessionName": "Sesi I (Pagi)",
+      "isOnline": true,
+      "category": "Ibadah Raya",
+      "location": "Main Sanctuary (Lt. 1)",
+      "title": "1",
+      "dateDay": "Setiap Hari Minggu",
+      "notes": "",
+      "speaker": "",
+      "time": "07.00 WIB"
+    },
+    {
+      "sessionName": "Sesi I ",
+      "worshipLeader": "yeni",
+      "id": "sch_1784705807049",
+      "isOnline": true,
+      "category": "Ibadah Raya",
+      "dateDay": "Setiap Hari Minggu",
+      "title": "pagi",
+      "location": "Main Sanctuary (Lt. 1)",
+      "time": "07.00 WIB",
+      "speaker": "pdt.moses",
+      "notes": ""
+    },
+    {
+      "isOnline": true,
+      "id": "sch_1784705977714",
+      "worshipLeader": "rani",
+      "sessionName": "Sesi I (Pagi)",
+      "notes": "",
+      "speaker": "pdt. moses",
+      "time": "08.00 WIB",
+      "location": "Main Sanctuary (Lt. 1)",
+      "title": "ibadah raya 1",
+      "dateDay": "Setiap Hari Minggu",
+      "category": "Ibadah Raya"
+    },
+    {
+      "category": "Ibadah Raya",
+      "title": "ibadah pagi",
+      "dateDay": "Setiap Hari Minggu",
+      "location": "Main Sanctuary (Lt. 1)",
+      "time": "07.00 WIB",
+      "notes": "",
+      "speaker": "pdt.moses",
+      "sessionName": "Sesi I (Pagi)",
+      "worshipLeader": "ranny",
+      "id": "sch_1784706598271",
+      "isOnline": false
+    },
+    {
+      "worshipLeader": "ssss",
+      "sessionName": "Sesi I (Pagi)",
+      "id": "sch_1784706629710",
+      "isOnline": false,
+      "category": "Pemuda",
+      "dateDay": "Setiap Hari Minggu",
+      "title": "ss",
+      "location": "Main Sanctuary (Lt. 1)",
+      "time": "07.00 WIB",
+      "speaker": "sss",
+      "notes": ""
+    },
+    {
+      "isOnline": false,
+      "worshipLeader": "dddd",
+      "sessionName": "Sesi I (Pagi)",
+      "id": "sch_1784706654670",
+      "time": "07.00 WIB",
+      "speaker": "ddd",
+      "notes": "",
+      "dateDay": "Setiap Hari Minggu",
+      "title": "dddd",
+      "location": "Main Sanctuary (Lt. 1)",
+      "category": "Ibadah Raya"
+    },
+    {
+      "notes": "",
+      "speaker": "dddddd",
+      "time": "07.00 WIB",
+      "location": "Main Sanctuary (Lt. 1)",
+      "dateDay": "Setiap Hari Minggu",
+      "title": "ddddd",
+      "category": "Ibadah Raya",
+      "isOnline": false,
+      "id": "sch_1784706971876",
+      "worshipLeader": "dddddddd",
+      "sessionName": "Sesi I (Pagi)"
+    },
+    {
+      "category": "Ibadah Raya",
+      "dateDay": "Setiap Hari Minggu",
+      "title": "kingdom",
+      "location": "Main Sanctuary (Lt. 1)",
+      "time": "07.00 WIB",
+      "speaker": "dddd",
+      "notes": "",
+      "worshipLeader": "dddd",
+      "sessionName": "Sesi I (Pagi)",
+      "id": "sch_1784710170987",
+      "isOnline": false
+    },
+    {
+      "isOnline": false,
+      "worshipLeader": "ddd",
+      "sessionName": "Sesi I (Pagi)",
+      "id": "sch_1784710765277",
+      "category": "Ibadah Raya",
+      "time": "07.00 WIB",
+      "notes": "",
+      "speaker": "ddd",
+      "title": "lagi",
+      "dateDay": "Setiap Hari Minggu",
+      "location": "Main Sanctuary (Lt. 1)"
+    },
+    {
+      "category": "Ibadah Raya",
+      "time": "07.00 WIB",
+      "notes": "",
+      "speaker": "moses",
+      "title": "saya",
+      "dateDay": "Setiap Hari Minggu",
+      "location": "Main Sanctuary (Lt. 1)",
+      "isOnline": false,
+      "sessionName": "Sesi I (Pagi)",
+      "worshipLeader": "ranny",
+      "id": "sch_1784712160926"
+    }
+  ],
+  "settings": {
+    "logoUrl": "https://images.unsplash.com/photo-1548625361-155de0cbb10a?w=120&auto=format&fit=crop&q=80",
+    "phone": "031-8681234 / +62 811-3333-5555",
+    "mapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.82200832049!2d112.780123!3d-7.378123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjInNDEuMiJTIDExMsKwNDYnNDguNCJF!5e0!3m2!1sid!2sid!4v1710920000000!5m2!1sid!2sid",
+    "bannerUrl": "https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1200&auto=format&fit=crop&q=80",
+    "seoDescription": "Sistem Informasi Manajemen dan Pelayanan SYSTEM MANAJEMEN CHURCH. Membangun jemaat yang bertumbuh, melayani dengan kasih.",
+    "churchName": "SYSTEM MANAJEMEN CHURCH",
+    "footerText": "© 2026 SYSTEM MANAJEMEN CHURCH. Hak Cipta Dilindungi.",
+    "mapsLinkUrl": "https://maps.app.goo.gl/gbirockjuanda",
+    "primaryColor": "#1e3a8a",
+    "customMenus": [
+      {
+        "id": "admin_dashboard",
+        "label": "Dashboard Admin",
+        "visible": true
+      },
+      {
+        "id": "admin_news",
+        "visible": true,
+        "label": "Kelola Berita"
+      },
+      {
+        "id": "admin_announcements",
+        "label": "Kelola Pengumuman",
+        "visible": true
+      },
+      {
+        "id": "admin_devotions",
+        "visible": true,
+        "label": "Kelola Renungan"
+      },
+      {
+        "id": "admin_events",
+        "label": "Kelola Event",
+        "visible": true
+      },
+      {
+        "label": "Data Jemaat",
+        "visible": true,
+        "id": "admin_congregation"
+      },
+      {
+        "label": "Kelola Akun & Sandi",
+        "visible": true,
+        "id": "admin_users"
+      },
+      {
+        "label": "Moderasi Komentar",
+        "visible": true,
+        "id": "admin_comments"
+      },
+      {
+        "label": "Kirim Notifikasi",
+        "visible": true,
+        "id": "admin_notifications"
+      },
+      {
+        "label": "Kelola Pelayanan",
+        "visible": true,
+        "id": "admin_ministries"
+      },
+      {
+        "id": "admin_organizations",
+        "label": "Struktur Organisasi",
+        "visible": true
+      },
+      {
+        "label": "Kelola Galeri",
+        "visible": true,
+        "id": "admin_gallery"
+      },
+      {
+        "label": "Pengaturan Sistem",
+        "visible": true,
+        "id": "admin_settings"
+      },
+      {
+        "id": "jemaat_home",
+        "visible": true,
+        "label": "Beranda Jemaat"
+      },
+      {
+        "visible": true,
+        "label": "Jadwal Ibadah",
+        "id": "jemaat_schedule"
+      },
+      {
+        "id": "jemaat_devotions",
+        "label": "Renungan Harian",
+        "visible": true
+      },
+      {
+        "id": "jemaat_events",
+        "label": "Event Gereja",
+        "visible": true
+      },
+      {
+        "label": "Kas/Donasi",
+        "visible": true,
+        "id": "jemaat_donasi"
+      },
+      {
+        "visible": true,
+        "label": "Pelayanan Jemaat",
+        "id": "jemaat_ministries"
+      },
+      {
+        "visible": true,
+        "label": "Struktur Pengurus",
+        "id": "jemaat_organization"
+      },
+      {
+        "id": "jemaat_gallery",
+        "label": "Galeri Media",
+        "visible": true
+      },
+      {
+        "id": "jemaat_profile",
+        "label": "Profil Saya",
+        "visible": true
+      }
+    ],
+    "bankName": "BCA (Bank Central Asia)",
+    "address": "Jl. Raya Juanda No. 1, Sidoarjo, Jawa Timur 61253",
+    "seoTitle": "SYSTEM MANAJEMEN CHURCH - Portal Jemaat & Pelayanan",
+    "bankAccountNo": "8290123456",
+    "maxUploadSizeMb": 10,
+    "googleSheetUrl": "",
+    "qrisUrl": "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=SYSTEM_MANAJEMEN_CHURCH_OFFERING",
+    "email": "info@gbirockjuanda.org",
+    "bankAccountName": "SYSTEM MANAJEMEN CHURCH",
+    "faviconUrl": "https://images.unsplash.com/photo-1548625361-155de0cbb10a?w=32&auto=format&fit=crop&q=80",
+    "website": "https://www.gbirockjuanda.org",
+    "socialMedia": {
+      "tiktok": "https://tiktok.com/@gbirockjuanda",
+      "instagram": "https://instagram.com/gbirockjuanda",
+      "youtube": "https://youtube.com/gbirockjuanda",
+      "facebook": "https://facebook.com/gbirockjuanda"
+    },
+    "adminWelcomeText": "Selamat Datang, Pnt. Budi Santoso!",
+    "adminSubText": "Sistem Informasi Manajemen dan Pelayanan CMS. Kelola berita, kustomisasi donasi, moderation komentar, and kelola jajaran organisasi secara instan.",
+    "jemaatWelcomeTitle": "SELAMAT DATANG DI SYSTEM MANAJEMEN CHURCH",
+    "jemaatWelcomeSubtext": "Membangun jemaat yang bertumbuh, melayani dengan kasih, dan memuliakan nama Tuhan Yesus Kristus. Temukan informasi jadwal ibadah, warta jemaat, permohonan doa syafaat, serta salurkan persembahan kasih Anda melalui menu donasi.",
+    "bannerUrl": "https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1200&auto=format&fit=crop&q=80"
+  },
+  "test_write": {
+    "message": "Hello from test script",
+    "time": "2026-07-21T13:42:08.094Z"
+  },
+  "users": [
+    {
+      "id": "use_1784712335333_0",
+      "email": "tn.timbu@gmail.com",
+      "name": "Moses",
+      "role": "Admin",
+      "photoUrl": "",
+      "statusBaptis": "",
+      "statusPernikahan": "",
+      "phone": "",
+      "address": "",
+      "komisi": "",
+      "keluarga": "",
+      "pelayanan": "",
+      "joinDate": "",
+      "password": ""
+    }
+  ],
+  "donations": [
+    {
+      "id": "don_1",
+      "donorName": "Andi Wijaya",
+      "userId": "usr_jemaat",
+      "userEmail": "jemaat@church.com",
+      "phone": "081234567803",
+      "amount": 500000,
+      "type": "Persepuluhan",
+      "note": "Persepuluhan bulan Juli 2026. Terima kasih Tuhan Yesus.",
+      "paymentMethod": "Transfer Bank",
+      "date": "2026-07-20T09:30:00.000Z",
+      "status": "verified",
+      "verifiedBy": "Pnt. Budi Santoso",
+      "verifiedDate": "2026-07-20T10:15:00.000Z"
+    },
+    {
+      "id": "don_2",
+      "donorName": "Siti Rahmawati",
+      "userId": "usr_admin",
+      "userEmail": "admin@church.com",
+      "phone": "081234567802",
+      "amount": 250000,
+      "type": "Donasi Pembangunan",
+      "note": "Dukungan dana renovasi ruang sound system gereja.",
+      "paymentMethod": "QRIS",
+      "date": "2026-07-21T14:20:00.000Z",
+      "status": "verified",
+      "verifiedBy": "Pnt. Budi Santoso",
+      "verifiedDate": "2026-07-21T15:00:00.000Z"
+    },
+    {
+      "id": "don_3",
+      "donorName": "Bpk. Daniel Setiawan",
+      "userId": "usr_guest_1",
+      "userEmail": "daniel@gmail.com",
+      "phone": "081199887766",
+      "amount": 1000000,
+      "type": "Diakonia / Sosial",
+      "note": "Persembahan kasih untuk aksi donor darah & pengobatan gratis.",
+      "paymentMethod": "Transfer Bank",
+      "date": "2026-07-22T08:10:00.000Z",
+      "status": "pending"
+    }
+  ]
+}
