@@ -173,10 +173,11 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         (window as any).deferredPrompt = null;
       }
     } else {
-      // If deferredPrompt is not yet available (e.g. POCO / Xiaomi / Samsung / Chrome)
+      // If deferredPrompt is not available (e.g. Samsung / Xiaomi / POCO / Vivo / Oppo / In-App Browser)
       if (deviceInfo.isInAppBrowser && deviceInfo.isAndroid) {
         handleOpenInChrome();
       } else {
+        // Show modal with direct highlighted guide & top pointer
         setShowInstallModal(true);
         setShowManualGuide(true);
       }
@@ -488,13 +489,45 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
               <div className="pt-2 flex flex-col gap-2">
                 {/* Main 1-Click Install Action Button */}
                 <button
-                  onClick={handleInstallClick}
+                  onClick={() => {
+                    const promptEvent = deferredPrompt || (window as any).deferredPrompt;
+                    if (promptEvent && typeof promptEvent.prompt === 'function') {
+                      handleInstallClick();
+                    } else if (deviceInfo.isInAppBrowser && deviceInfo.isAndroid) {
+                      handleOpenInChrome();
+                    } else {
+                      // Trigger manual guide focus & scroll/highlight
+                      setShowManualGuide(true);
+                      if (deviceInfo.isAndroid) {
+                        // Also open full guide modal if user clicked button without native prompt
+                        setShowInstallModal(false);
+                        setActiveGuideTab('android');
+                        setShowGuideModal(true);
+                      }
+                    }
+                  }}
                   disabled={isInstalling}
                   className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <Download className="w-4 h-4" />
-                  <span>{isInstalling ? 'Proses Memasang...' : '⚡ PASANG LANGSUNG KE HP SAYA'}</span>
+                  <span>
+                    {isInstalling
+                      ? 'Proses Memasang...'
+                      : (deferredPrompt || (window as any).deferredPrompt)
+                      ? '⚡ PASANG LANGSUNG KE HP SAYA'
+                      : '📲 PASANG VIA MENU BROWSER HP (1-KLIK)'}
+                  </span>
                 </button>
+
+                {deviceInfo.isAndroid && !(deferredPrompt || (window as any).deferredPrompt) && (
+                  <button
+                    onClick={handleOpenInChrome}
+                    className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-amber-500/30"
+                  >
+                    <Chrome className="w-4 h-4 text-amber-400" />
+                    <span>Buka di Google Chrome (Untuk Instalasi Otomatis)</span>
+                  </button>
+                )}
 
                 <button
                   onClick={() => {
@@ -503,10 +536,10 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                     else setActiveGuideTab('android');
                     setShowGuideModal(true);
                   }}
-                  className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-medium text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Lihat Panduan Bantuan Lengkap All Device</span>
+                  <span>Lihat Petunjuk Bergambar Semua Device</span>
                 </button>
               </div>
             </motion.div>
