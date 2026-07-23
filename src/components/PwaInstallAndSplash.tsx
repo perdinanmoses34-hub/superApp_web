@@ -29,6 +29,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     isIos: false,
     isMobile: false,
     isInAppBrowser: false,
+    isInIframe: false,
     isXiaomi: false,
     isSamsung: false,
     isOppoVivo: false,
@@ -36,19 +37,20 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
   });
 
   useEffect(() => {
-    // Check if already running in PWA standalone mode
+    // Check if running in PWA standalone mode
     const isStandaloneMode =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as any).standalone === true ||
       document.referrer.includes('android-app://');
     setIsStandalone(isStandaloneMode);
 
-    // Detect Device, Browser & In-App Browser types
+    // Detect Device, Browser, In-App Browser & iFrame state
     const ua = navigator.userAgent.toLowerCase();
     const isAndroid = /android/i.test(ua);
     const isIos = /ipad|iphone|ipod/i.test(ua) && !(window as any).MSStream;
     const isMobile = isAndroid || isIos || /mobile|tablet/i.test(ua);
     const isInAppBrowser = /fban|fbav|instagram|line|whatsapp|micromessenger|snapchat|tiktok|twitter/i.test(ua);
+    const isInIframe = window.self !== window.top;
 
     const isXiaomi = /xiaomi|poco|redmi|miui|hyperos/i.test(ua);
     const isSamsung = /samsung|samsungbrowser/i.test(ua);
@@ -63,7 +65,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     else if (/crios|chrome/i.test(ua)) browserName = 'Chrome';
     else if (/safari/i.test(ua)) browserName = 'Safari';
 
-    setDeviceInfo({ isAndroid, isIos, isMobile, isInAppBrowser, isXiaomi, isSamsung, isOppoVivo, browserName });
+    setDeviceInfo({ isAndroid, isIos, isMobile, isInAppBrowser, isInIframe, isXiaomi, isSamsung, isOppoVivo, browserName });
     
     if (isIos) setActiveGuideTab('ios');
     else if (isXiaomi) setActiveGuideTab('xiaomi');
@@ -156,6 +158,12 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
   }, []);
 
   const handleInstallClick = async () => {
+    // If running inside an iFrame (e.g. preview mode), launch in a new tab so browser PWA triggers work
+    if (window.self !== window.top) {
+      window.open(window.location.href, '_blank');
+      return;
+    }
+
     // Check if deferredPrompt is available directly or on window
     const promptEvent = deferredPrompt || (window as any).deferredPrompt;
 
@@ -479,6 +487,26 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                   </div>
                 </div>
               </div>
+
+              {/* If opened inside iframe / preview mode, show clear prompt to open in a new tab */}
+              {deviceInfo.isInIframe && (
+                <div className="p-3.5 bg-amber-500/20 border-2 border-amber-400 rounded-2xl space-y-2 text-xs">
+                  <div className="flex items-center gap-2 text-amber-300 font-bold text-[11px] uppercase tracking-wide">
+                    <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                    <span>Aplikasi Dibuka di Dalam Frame Preview</span>
+                  </div>
+                  <p className="text-[11px] text-slate-200 leading-snug">
+                    Browser HP (Chrome/Samsung) menyembunyikan tombol "Instal" jika dibuka dari dalam preview. Buka di Tab Baru agar tombol "Instal" otomatis muncul!
+                  </p>
+                  <button
+                    onClick={() => window.open(window.location.href, '_blank')}
+                    className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>🔗 BUKA DI TAB BARU BROWSER HP</span>
+                  </button>
+                </div>
+              )}
 
               {/* If opened inside WhatsApp or In-App Browser on Android, offer 1-tap open in Chrome */}
               {deviceInfo.isInAppBrowser && deviceInfo.isAndroid && (

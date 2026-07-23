@@ -1,61 +1,41 @@
 {
-  "id": "church-management-system-app",
+  "id": "/",
   "short_name": "CMS Gereja",
   "name": "CMS - SYSTEM MANAJEMEN CHURCH",
   "description": "Aplikasi CMS Sistem Manajemen & Pelayanan Gereja Digital Android Standalone",
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "/icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "./icon-maskable-192.png",
+      "src": "/icon-maskable-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "./icon-512.png",
+      "src": "/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "./icon-maskable-512.png",
+      "src": "/icon-maskable-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
-    },
-    {
-      "src": "./icon.svg",
-      "type": "image/svg+xml",
-      "sizes": "512x512 192x192",
-      "purpose": "any"
     }
   ],
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/",
+  "scope": "/",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "display": "standalone",
   "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "orientation": "portrait",
-  "categories": ["utilities", "lifestyle"],
-  "shortcuts": [
-    {
-      "name": "Jadwal Ibadah",
-      "short_name": "Jadwal",
-      "url": "./?shortcut=jadwal",
-      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Warta & Doa",
-      "short_name": "Warta",
-      "url": "./?shortcut=warta",
-      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
-    }
-  ]
+  "categories": ["utilities", "lifestyle"]
 }
