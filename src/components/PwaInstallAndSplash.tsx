@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, Smartphone, CheckCircle2, X, Sparkles, Chrome, Compass, Info, HelpCircle, ExternalLink, RefreshCw } from 'lucide-react';
+import { Download, Smartphone, CheckCircle2, X, Sparkles, Chrome, Compass, Info, HelpCircle, ExternalLink, RefreshCw, Share2 } from 'lucide-react';
 
 interface PwaInstallAndSplashProps {
   churchName?: string;
@@ -45,7 +45,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     const isAndroid = /android/i.test(ua);
     const isIos = /ipad|iphone|ipod/i.test(ua) && !(window as any).MSStream;
     const isMobile = isAndroid || isIos || /mobile|tablet/i.test(ua);
-    const isInAppBrowser = /fban|fbav|instagram|line|whatsapp|wv|micromessenger/i.test(ua);
+    // Remove 'wv' to prevent standard Android browsers/Chrome from being misidentified as social in-app browsers
+    const isInAppBrowser = /fban|fbav|instagram|line|whatsapp|micromessenger|snapchat|tiktok|twitter/i.test(ua);
 
     let browserName = 'Browser';
     if (/samsungbrowser/i.test(ua)) browserName = 'Samsung Internet';
@@ -186,12 +187,14 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
 
   const handleOpenInChrome = () => {
     const currentUrl = window.location.href;
-    if (deviceInfo.isAndroid) {
-      // Intent URL to open directly in Google Chrome on Android ONLY IF opened from inside WhatsApp or In-App Browser
+    if (deviceInfo.isAndroid && deviceInfo.isInAppBrowser) {
+      // Intent URL ONLY to switch out of WhatsApp/Instagram webview to standalone Chrome
       const cleanUrl = currentUrl.replace(/^https?:\/\//, '');
       window.location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
     } else {
-      window.open(currentUrl, '_blank');
+      // If already in standard browser, show the 1-click install modal & guide without reloading!
+      setShowInstallModal(true);
+      setShowManualGuide(true);
     }
   };
 
@@ -496,14 +499,8 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                     } else if (deviceInfo.isInAppBrowser && deviceInfo.isAndroid) {
                       handleOpenInChrome();
                     } else {
-                      // Trigger manual guide focus & scroll/highlight
+                      // Keep modal open and highlight direct 3-step menu guide!
                       setShowManualGuide(true);
-                      if (deviceInfo.isAndroid) {
-                        // Also open full guide modal if user clicked button without native prompt
-                        setShowInstallModal(false);
-                        setActiveGuideTab('android');
-                        setShowGuideModal(true);
-                      }
                     }
                   }}
                   disabled={isInstalling}
@@ -515,19 +512,33 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                       ? 'Proses Memasang...'
                       : (deferredPrompt || (window as any).deferredPrompt)
                       ? '⚡ PASANG LANGSUNG KE HP SAYA'
-                      : '📲 PASANG VIA MENU BROWSER HP (1-KLIK)'}
+                      : '📲 LIHAT LANGKAH PASANG BROWSER HP'}
                   </span>
                 </button>
 
-                {deviceInfo.isAndroid && !(deferredPrompt || (window as any).deferredPrompt) && (
-                  <button
-                    onClick={handleOpenInChrome}
-                    className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-amber-500/30"
-                  >
-                    <Chrome className="w-4 h-4 text-amber-400" />
-                    <span>Buka di Google Chrome (Untuk Instalasi Otomatis)</span>
-                  </button>
-                )}
+                {/* Share / Copy Link Button */}
+                <button
+                  onClick={async () => {
+                    try {
+                      if (navigator.share) {
+                        await navigator.share({
+                          title: 'CMS Gereja App',
+                          text: 'Instal Aplikasi CMS Gereja langsung di HP Anda:',
+                          url: window.location.href,
+                        });
+                      } else {
+                        await navigator.clipboard.writeText(window.location.href);
+                        alert('Link aplikasi berhasil disalin! Buka di browser HP Anda.');
+                      }
+                    } catch (err) {
+                      console.log('Share canceled:', err);
+                    }
+                  }}
+                  className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-2 border border-amber-500/30"
+                >
+                  <Share2 className="w-4 h-4 text-amber-400" />
+                  <span>📋 Salin & Bagikan Link Aplikasi</span>
+                </button>
 
                 <button
                   onClick={() => {
@@ -539,7 +550,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                   className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-medium text-xs rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Lihat Petunjuk Bergambar Semua Device</span>
+                  <span>Petunjuk Gambar Semua Device (POCO/Samsung/Oppo/Vivo)</span>
                 </button>
               </div>
             </motion.div>
@@ -614,10 +625,11 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                       onClick={() => {
                         setShowGuideModal(false);
                         const promptEvent = deferredPrompt || (window as any).deferredPrompt;
-                        if (promptEvent) {
-                          promptEvent.prompt();
+                        if (promptEvent && typeof promptEvent.prompt === 'function') {
+                          handleInstallClick();
                         } else {
-                          handleOpenInChrome();
+                          setShowInstallModal(true);
+                          setShowManualGuide(true);
                         }
                       }}
                       className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all"
