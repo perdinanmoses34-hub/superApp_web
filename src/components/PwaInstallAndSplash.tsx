@@ -29,6 +29,9 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     isIos: false,
     isMobile: false,
     isInAppBrowser: false,
+    isXiaomi: false,
+    isSamsung: false,
+    isOppoVivo: false,
     browserName: 'Chrome',
   });
 
@@ -45,10 +48,13 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     const isAndroid = /android/i.test(ua);
     const isIos = /ipad|iphone|ipod/i.test(ua) && !(window as any).MSStream;
     const isMobile = isAndroid || isIos || /mobile|tablet/i.test(ua);
-    // Remove 'wv' to prevent standard Android browsers/Chrome from being misidentified as social in-app browsers
     const isInAppBrowser = /fban|fbav|instagram|line|whatsapp|micromessenger|snapchat|tiktok|twitter/i.test(ua);
 
-    let browserName = 'Browser';
+    const isXiaomi = /xiaomi|poco|redmi|miui|hyperos/i.test(ua);
+    const isSamsung = /samsung|samsungbrowser/i.test(ua);
+    const isOppoVivo = /oppo|vivo|realme/i.test(ua);
+
+    let browserName = 'Chrome';
     if (/samsungbrowser/i.test(ua)) browserName = 'Samsung Internet';
     else if (/miuibrowser/i.test(ua)) browserName = 'Xiaomi Browser';
     else if (/ucbrowser/i.test(ua)) browserName = 'UC Browser';
@@ -57,8 +63,12 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
     else if (/crios|chrome/i.test(ua)) browserName = 'Chrome';
     else if (/safari/i.test(ua)) browserName = 'Safari';
 
-    setDeviceInfo({ isAndroid, isIos, isMobile, isInAppBrowser, browserName });
-    setActiveGuideTab(isIos ? 'ios' : 'android');
+    setDeviceInfo({ isAndroid, isIos, isMobile, isInAppBrowser, isXiaomi, isSamsung, isOppoVivo, browserName });
+    
+    if (isIos) setActiveGuideTab('ios');
+    else if (isXiaomi) setActiveGuideTab('xiaomi');
+    else if (isSamsung) setActiveGuideTab('samsung');
+    else setActiveGuideTab('android');
 
     // Always show banner for non-standalone mode
     if (!isStandaloneMode) {
@@ -490,7 +500,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                 </div>
               )}
 
-              {/* Universal 3-Step Direct Installation Guide Box for POCO / Xiaomi / Samsung / Oppo / Vivo */}
+              {/* Universal 3-Step Direct Installation Guide Box tailored for Samsung / Xiaomi / POCO / Vivo / Oppo / Chrome */}
               {(showManualGuide || !(deferredPrompt || (window as any).deferredPrompt)) && deviceInfo.isAndroid && !deviceInfo.isInAppBrowser && (
                 <motion.div
                   initial={{ opacity: 0, y: -5 }}
@@ -500,24 +510,58 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
                   <div className="flex items-center justify-between font-black text-amber-300 text-[12px] uppercase tracking-wide">
                     <span className="flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-                      Langkah Pasang di {deviceInfo.browserName}:
+                      Langkah Pasang di HP {deviceInfo.isSamsung ? 'Samsung' : deviceInfo.isXiaomi ? 'Xiaomi / POCO' : deviceInfo.browserName}:
                     </span>
                     <span className="text-[10px] text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded-full font-mono">
-                      100% BEBAS PLAYSTORE
+                      BEBAS PLAYSTORE
                     </span>
                   </div>
 
-                  <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-200 font-medium leading-snug">
-                    <li>
-                      Ketuk menu <strong className="text-amber-300">Tiga Titik (⋮)</strong> atau menu browser di kanan atas / bawah layar HP.
-                    </li>
-                    <li>
-                      Pilih menu <strong className="text-amber-300 font-bold">"Instal aplikasi"</strong> atau <strong className="text-amber-300 font-bold">"Tambahkan ke Layar Utama"</strong>.
-                    </li>
-                    <li>
-                      Ketuk <strong className="text-amber-300 font-bold">"Instal"</strong> — Ikon CMS Gereja akan langsung terpasang di HP Anda!
-                    </li>
-                  </ol>
+                  {deviceInfo.isSamsung ? (
+                    <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-200 font-medium leading-snug">
+                      <li>
+                        Ketuk menu <strong className="text-amber-300 font-bold">Garis Tiga (≡)</strong> di kanan bawah layar Samsung Anda.
+                      </li>
+                      <li>
+                        Ketuk ikon <strong className="text-amber-300 font-bold">+ Tambah Halaman Ke</strong> (Add page to).
+                      </li>
+                      <li>
+                        Pilih <strong className="text-amber-300 font-bold">"Layar Utama"</strong> (Home screen) atau <strong className="text-amber-300 font-bold">"Aplikasi Web"</strong>.
+                      </li>
+                      <li>
+                        Ketuk <strong className="text-amber-300 font-bold">"Instal / Tambah"</strong>.
+                      </li>
+                    </ol>
+                  ) : deviceInfo.isXiaomi ? (
+                    <div className="space-y-2">
+                      <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-200 font-medium leading-snug">
+                        <li>
+                          Ketuk menu <strong className="text-amber-300 font-bold">Tiga Titik (⋮)</strong> di sudut kanan atas.
+                        </li>
+                        <li>
+                          Pilih <strong className="text-amber-300 font-bold">"Instal aplikasi"</strong> atau <strong className="text-amber-300 font-bold">"Tambahkan ke Layar Utama"</strong>.
+                        </li>
+                        <li>
+                          Ketuk <strong className="text-amber-300 font-bold">"Instal"</strong>.
+                        </li>
+                      </ol>
+                      <div className="p-2 bg-slate-950/80 rounded-xl text-[10px] text-amber-200 font-normal border border-amber-500/20">
+                        💡 <strong>HP Xiaomi/POCO/Redmi:</strong> Jika popup di atas terhalang, buka <em>Pengaturan HP -&gt; Aplikasi -&gt; Chrome -&gt; Perizinan Lainnya -&gt; Izinkan 'Pintasan Layar Utama'</em>.
+                      </div>
+                    </div>
+                  ) : (
+                    <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-200 font-medium leading-snug">
+                      <li>
+                        Ketuk menu <strong className="text-amber-300 font-bold">Tiga Titik (⋮)</strong> di kanan atas browser HP Anda.
+                      </li>
+                      <li>
+                        Pilih menu <strong className="text-amber-300 font-bold">"Instal aplikasi"</strong> atau <strong className="text-amber-300 font-bold">"Tambahkan ke Layar Utama"</strong>.
+                      </li>
+                      <li>
+                        Ketuk <strong className="text-amber-300 font-bold">"Instal"</strong> — Ikon aplikasi akan langsung muncul di Home Screen HP!
+                      </li>
+                    </ol>
+                  )}
                 </motion.div>
               )}
 

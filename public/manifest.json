@@ -1,6 +1,6 @@
 {
   "id": "church-management-system-app",
-  "short_name": "CMS",
+  "short_name": "CMS Gereja",
   "name": "CMS - SYSTEM MANAJEMEN CHURCH",
   "description": "Aplikasi CMS Sistem Manajemen & Pelayanan Gereja Digital Android Standalone",
   "prefer_related_applications": false,
@@ -9,7 +9,7 @@
       "src": "./icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "./icon-maskable-192.png",
@@ -21,7 +21,7 @@
       "src": "./icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "./icon-maskable-512.png",
@@ -33,7 +33,7 @@
       "src": "./icon.svg",
       "type": "image/svg+xml",
       "sizes": "512x512 192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "start_url": "./",
