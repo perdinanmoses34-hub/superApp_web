@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, Smartphone, CheckCircle2, X, Sparkles, Chrome, Compass, Info, HelpCircle, ExternalLink, RefreshCw, Share2 } from 'lucide-react';
+import { Download, Smartphone, CheckCircle2, X, Sparkles, Chrome, Compass, Info, HelpCircle, ExternalLink, RefreshCw, Share2, Globe } from 'lucide-react';
 
 interface PwaInstallAndSplashProps {
   churchName?: string;
@@ -19,7 +19,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [showManualGuide, setShowManualGuide] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
-  const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'ios'>('android');
+  const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'samsung' | 'xiaomi' | 'ios'>('android');
   const [isInstalling, setIsInstalling] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
@@ -160,6 +160,7 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
           setShowInstallBanner(false);
           setShowInstallModal(false);
           setShowGuideModal(false);
+          setShowManualGuide(false);
         } else {
           setShowInstallModal(true);
           setShowManualGuide(true);
@@ -174,25 +175,20 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
         (window as any).deferredPrompt = null;
       }
     } else {
-      // If deferredPrompt is not available (e.g. Samsung / Xiaomi / POCO / Vivo / Oppo / In-App Browser)
-      if (deviceInfo.isInAppBrowser && deviceInfo.isAndroid) {
-        handleOpenInChrome();
-      } else {
-        // Show modal with direct highlighted guide & top pointer
-        setShowInstallModal(true);
-        setShowManualGuide(true);
-      }
+      // NEVER reload or redirect page! Always show direct install modal & top menu guide
+      setShowInstallModal(true);
+      setShowManualGuide(true);
     }
   };
 
   const handleOpenInChrome = () => {
     const currentUrl = window.location.href;
     if (deviceInfo.isAndroid && deviceInfo.isInAppBrowser) {
-      // Intent URL ONLY to switch out of WhatsApp/Instagram webview to standalone Chrome
+      // Intent URL ONLY if explicitly user-clicked from inside WhatsApp/Instagram webview to switch to Chrome
       const cleanUrl = currentUrl.replace(/^https?:\/\//, '');
       window.location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
     } else {
-      // If already in standard browser, show the 1-click install modal & guide without reloading!
+      // If already in standard browser, show the install modal & guide without reloading!
       setShowInstallModal(true);
       setShowManualGuide(true);
     }
@@ -274,6 +270,42 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
               <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">
                 Sistem Gereja Digital PWA • Fullscreen Standalone
               </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* TOP MANUAL INSTALLATION DIRECTION ARROW BANNER */}
+      <AnimatePresence>
+        {showManualGuide && !isStandalone && (
+          <motion.div
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -60, opacity: 0 }}
+            className="fixed top-2 left-2 right-2 z-[999] bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 p-3 rounded-2xl shadow-2xl border-2 border-amber-300/80 flex items-center justify-between gap-3 font-bold text-xs"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-slate-950 text-amber-400 font-black text-sm flex items-center justify-center shrink-0 border border-amber-300/30">
+                1
+              </div>
+              <div className="leading-tight truncate">
+                <p className="font-extrabold text-slate-950 text-[12px] uppercase tracking-tight">
+                  Pemasangan di {deviceInfo.browserName}:
+                </p>
+                <p className="text-[11px] text-slate-900 font-semibold truncate">
+                  Ketuk menu <strong className="font-black text-slate-950">Tiga Titik (⋮) / Menu (≡)</strong> di HP → pilih <strong className="font-black text-slate-950">"Instal aplikasi"</strong>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <Sparkles className="w-5 h-5 text-slate-950 animate-bounce" />
+              <button
+                onClick={() => setShowManualGuide(false)}
+                className="p-1.5 bg-slate-950/20 hover:bg-slate-950/30 text-slate-950 rounded-full cursor-pointer transition-colors"
+                title="Tutup"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
           </motion.div>
         )}
@@ -588,78 +620,103 @@ export default function PwaInstallAndSplash({ churchName = 'SYSTEM MANAJEMEN CHU
               </div>
 
               {/* PLATFORM SELECTOR TABS */}
-              <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-[11px]">
                 <button
                   onClick={() => setActiveGuideTab('android')}
-                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  className={`py-2 px-2 font-bold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     activeGuideTab === 'android'
-                      ? 'bg-amber-500 text-slate-950 shadow-md'
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
-                  <Chrome className="w-4 h-4" />
-                  <span>Android (POCO / Xiaomi / All)</span>
+                  <Chrome className="w-3.5 h-3.5" />
+                  <span>Chrome / All</span>
+                </button>
+                <button
+                  onClick={() => setActiveGuideTab('xiaomi')}
+                  className={`py-2 px-2 font-bold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    activeGuideTab === 'xiaomi'
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-black'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>POCO / Xiaomi</span>
+                </button>
+                <button
+                  onClick={() => setActiveGuideTab('samsung')}
+                  className={`py-2 px-2 font-bold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    activeGuideTab === 'samsung'
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-black'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Samsung</span>
                 </button>
                 <button
                   onClick={() => setActiveGuideTab('ios')}
-                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  className={`py-2 px-2 font-bold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     activeGuideTab === 'ios'
-                      ? 'bg-amber-500 text-slate-950 shadow-md'
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
-                  <Compass className="w-4 h-4" />
-                  <span>iPhone / iPad (iOS)</span>
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>iPhone / iOS</span>
                 </button>
               </div>
 
-              {/* TAB CONTENT: ANDROID (POCO, XIAOMI, CHROME, SAMSUNG, OPPO, VIVO, UC) */}
+              {/* TAB CONTENT: ANDROID (CHROME / INFINIX / VIVO / OPPO / REALME) */}
               {activeGuideTab === 'android' && (
-                <div className="space-y-4 animate-fade-in text-xs text-slate-300">
-                  {/* Direct Auto Install Button */}
-                  <div className="bg-gradient-to-r from-amber-500/20 to-amber-500/10 border border-amber-500/30 p-3 rounded-2xl text-center space-y-2">
-                    <p className="text-[11px] font-bold text-amber-300">
-                      Rekomendasi: Pasang Langsung Otomatis
-                    </p>
-                    <button
-                      onClick={() => {
-                        setShowGuideModal(false);
-                        const promptEvent = deferredPrompt || (window as any).deferredPrompt;
-                        if (promptEvent && typeof promptEvent.prompt === 'function') {
-                          handleInstallClick();
-                        } else {
-                          setShowInstallModal(true);
-                          setShowManualGuide(true);
-                        }
-                      }}
-                      className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>⚡ Pasang Sekarang Ke HP</span>
-                    </button>
-                  </div>
-
-                  {/* Google Chrome / Brave / Edge / POCO Chrome */}
-                  <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+                <div className="space-y-3 animate-fade-in text-xs text-slate-300">
+                  <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-2">
                     <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
                       <Chrome className="w-4 h-4" />
-                      <span>Chrome / Browser Bawaan (Android / POCO)</span>
+                      <span>Google Chrome / Infinix / Vivo / Oppo</span>
                     </div>
                     <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-300 font-medium leading-relaxed">
-                      <li>Ketuk ikon <strong className="text-amber-400">tiga titik vertikal (⋮)</strong> di sudut kanan atas browser.</li>
-                      <li>Pilih menu <strong className="text-amber-400">"Instal aplikasi"</strong> (atau *"Tambahkan ke Layar Utama"*).</li>
-                      <li>Ketuk <strong className="text-amber-400">"Instal"</strong> pada jendela konfirmasi yang muncul di layar.</li>
-                      <li>Aplikasi akan terpasang di HP Anda dengan ikon mandiri tanpa bar browser!</li>
+                      <li>Ketuk ikon <strong className="text-amber-400">Tiga Titik (⋮)</strong> di sudut kanan atas Chrome.</li>
+                      <li>Pilih menu <strong className="text-amber-400 font-bold">"Instal aplikasi"</strong> (atau *"Tambahkan ke Layar Utama"*).</li>
+                      <li>Ketuk <strong className="text-amber-400 font-bold">"Instal"</strong> pada jendela konfirmasi.</li>
+                      <li>Ikon aplikasi langsung muncul di Home Screen HP Anda!</li>
                     </ol>
                   </div>
+                </div>
+              )}
 
-                  {/* WhatsApp / In-App Browser Warning */}
-                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 flex gap-2.5">
-                    <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                    <p className="text-[10px] text-amber-200 leading-relaxed font-medium">
-                      <strong className="text-amber-400 block uppercase tracking-wide text-[9px] mb-0.5">DIBUKA DARI WHATSAPP / INSTAGRAM?</strong>
-                      Jika Anda membuka website dari dalam pesan WhatsApp atau IG, ketuk <strong>tiga titik (⋮)</strong> di kanan atas layar lalu pilih <strong>"Buka di Browser"</strong> / <strong>"Buka di Chrome"</strong> agar aplikasi terpasang sempurna.
-                    </p>
+              {/* TAB CONTENT: XIAOMI / POCO / MIUI */}
+              {activeGuideTab === 'xiaomi' && (
+                <div className="space-y-3 animate-fade-in text-xs text-slate-300">
+                  <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-2">
+                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                      <Smartphone className="w-4 h-4" />
+                      <span>Xiaomi / POCO / Mi Browser / HyperOS</span>
+                    </div>
+                    <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-300 font-medium leading-relaxed">
+                      <li>Buka link di <strong className="text-amber-400">Chrome</strong> atau Mi Browser pada HP POCO/Xiaomi Anda.</li>
+                      <li>Ketuk ikon <strong className="text-amber-400">Tiga Titik (⋮)</strong> di kanan atas.</li>
+                      <li>Pilih menu <strong className="text-amber-400 font-bold">"Tambahkan ke Layar Utama"</strong> atau <strong className="text-amber-400 font-bold">"Instal aplikasi"</strong>.</li>
+                      <li>Ketuk <strong className="text-amber-400 font-bold">"Tambah/Instal"</strong> — Aplikasi terpasang tanpa iklan & fullscreen!</li>
+                    </ol>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB CONTENT: SAMSUNG INTERNET */}
+              {activeGuideTab === 'samsung' && (
+                <div className="space-y-3 animate-fade-in text-xs text-slate-300">
+                  <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-2">
+                    <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                      <Globe className="w-4 h-4" />
+                      <span>Samsung Internet Browser</span>
+                    </div>
+                    <ol className="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-300 font-medium leading-relaxed">
+                      <li>Ketuk menu <strong className="text-amber-400">Garis Tiga (≡)</strong> di kanan bawah layar Samsung Anda.</li>
+                      <li>Ketuk ikon <strong className="text-amber-400 font-bold">+ Tambah Halaman Ke</strong> (Add page to).</li>
+                      <li>Pilih opsi <strong className="text-amber-400 font-bold">"Layar Depan"</strong> (Home screen) atau <strong className="text-amber-400 font-bold">"Aplikasi Web"</strong>.</li>
+                      <li>Ketuk <strong className="text-amber-400 font-bold">"Instal"</strong> — Selesai!</li>
+                    </ol>
                   </div>
                 </div>
               )}
